@@ -1,2 +1,0 @@
-class GameSesson < ApplicationRecord
-end
