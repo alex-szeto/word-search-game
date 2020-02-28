@@ -24,6 +24,15 @@ ActiveRecord::Schema.define(version: 2020_02_28_154548) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "game_sessons", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "game_id"
+    t.integer "score"
+    t.string "time_completed"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "puzzle_settings", force: :cascade do |t|
     t.string "difficulty"
     t.string "grid_size"
