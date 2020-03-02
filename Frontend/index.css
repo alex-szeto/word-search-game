@@ -124,9 +124,19 @@ body{
     display: flex;
     margin: 4px;
 }
+.timer{
+    display: flex;
+}
 #word{
     display: flex;
     margin: 4px;
+}
+.wordBox{
+    display: flex;
+    border: solid;
+    min-width: 200px;
+    border-width: 1px;
+    background-color: whitesmoke;
 }
 
 .contentWindow{
@@ -149,6 +159,9 @@ body{
     margin: 10px;
 }
 
+h3{
+    margin: auto;
+}
 
 /* theme
 #eafffa
