@@ -162,6 +162,32 @@ body{
 h3{
     margin: auto;
 }
+#easy-grid {
+    display: grid;
+    grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px ;
+    background-color: black;
+    padding: 5px;
+  }
+
+  .element {
+    background-color: #f0f4f8;
+    border: 3px solid grey;
+    padding: 5px;
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .selected{
+      background-color: darkgray;
+  }
+
+  .valid{
+    background-color: lightgreen;
+}
+
+.del{
+    background-color: lightcoral;
+}
 
 /* theme
 #eafffa
