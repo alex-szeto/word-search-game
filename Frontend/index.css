@@ -1,15 +1,15 @@
 body{
     display: flex;
-    background-size: 100% 100%;
+    width: 100vw;
+    height: 100vh;
     flex-direction: column;
-    background: #d8dde0;
     margin: 0;
 }
 
 .nav{
     display: flex;
     height: 60px;
-    background: #294257;
+    background: #144974;
     padding: 0;
     justify-content: align-left;
 }
@@ -21,11 +21,15 @@ body{
 }
 .bodySections{
     display: flex;
+    background: #d8dde0;
+    align-content: stretch;
+    height: 100vh;
 }
+
 .sideNav{
     display:flex;
     width: 120px;
-    height: 700px;
+    /* height: 700px; */
     background-color: #adcce7;
     flex-direction: column;
 }
@@ -39,27 +43,110 @@ body{
 }
 
 #sideNavUl{
+    display: flex;
     list-style-type: none;
     padding: 0;
+    flex-direction: column;
+    /* get the side nav to show no  */
 }
 #navUl{
+    display: flex;
     list-style-type: none;
     padding: 0;
-    flex-direction: row;
+    flex-direction: column;
 }
 
-.li{
+.navLi{
     display: flex;
     align-items: center;
     padding: 10px;
     border: rgb(59, 55, 55);
     border-width: 1px;
     border-style: solid;
+    text-align: center;
+    border-radius: 4px;
 }
-.content{
+.navLi:hover{
+    background-color: #456f93;
+}
+.sideLi{
     display: flex;
-    margin: 100px;
+    text-align: center;
+    padding: 10px;
+    border-top: 2px rgb(59, 55, 55) solid;
+    border-width: 2px;
+}
+.sideLi:hover{
+    background-color: #9bb7d0;
+}
+
+/* .verticalContent{
+    display: flex;
+    border: orangered;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+} */
+
+.contentRight{
+    display: flex;
     background: #f0f4f8;
+    border-style: solid;
+    border-width: 1px;
+    border-color: purple;
+    margin: 10px;
+    justify-self: flex-start;
+    max-width: 150px;
+    max-height: 50vh;
+    /* align-self: flex-end; */
+}
+
+.verticalContent{
+    display: flex;
+    background: #d8dde0;
+    border-style: solid;
+    border-width: 1px;
+    border-color: green;
+    margin: 10px;
+    flex-direction: column;
+}
+.timerBar{
+    display: flex;
+    background: #d8dde0;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(59, 55, 55);
+    
+    border-radius: 4px;
+    justify-content: space-between;
+}
+#timer{
+    display: flex;
+    margin: 4px;
+}
+#word{
+    display: flex;
+    margin: 4px;
+}
+
+.contentWindow{
+    display: flex;
+    background: whitesmoke;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    border-color: blue;
+    margin: 10px;
+    min-width: 60vw;
+    min-height: 70vh;
+}
+.wordList{
+    display: flex;
+    background: whitesmoke;
+    border-style: solid;
+    border-width: 1px;
+    border-color: red;
+    margin: 10px;
 }
 
 
