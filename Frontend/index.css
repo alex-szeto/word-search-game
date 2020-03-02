@@ -18,7 +18,32 @@ body{
     display: flex;
     align-items: center;
     padding: 10px;
+    color: white
 }
+
+#navUl{
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    flex-direction: column;
+}
+
+.navLi{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: rgb(59, 55, 55);
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+    border-radius: 4px;
+    color: white
+}
+
+.navLi:hover{
+    background-color: #456f93;
+}
+
 .bodySections{
     display: flex;
     background: #d8dde0;
@@ -48,26 +73,6 @@ body{
     padding: 0;
     flex-direction: column;
     /* get the side nav to show no  */
-}
-#navUl{
-    display: flex;
-    list-style-type: none;
-    padding: 0;
-    flex-direction: column;
-}
-
-.navLi{
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border: rgb(59, 55, 55);
-    border-width: 1px;
-    border-style: solid;
-    text-align: center;
-    border-radius: 4px;
-}
-.navLi:hover{
-    background-color: #456f93;
 }
 .sideLi{
     display: flex;
@@ -147,8 +152,8 @@ body{
     border-radius: 6px;
     border-color: blue;
     margin: 10px;
-    min-width: 60vw;
-    min-height: 70vh;
+    min-width: 650px;
+    min-height: 700px;
 }
 .wordList{
     display: flex;
@@ -165,8 +170,9 @@ h3{
 #easy-grid {
     display: grid;
     grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px ;
-    background-color: black;
-    padding: 5px;
+    
+    /* background-color: black; */
+    /* padding: 5px; */
   }
 
   .element {

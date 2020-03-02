@@ -69,7 +69,7 @@ function populate(){
 function clear(){
     selected = []
     last_bfs = []
-    first_bfs = []
+    //first_bfs = []
 }
 
 function getCords(id){
@@ -127,7 +127,7 @@ function bfsLast(xy){
 }
 
 function delLast(){
-    console.log("hi")
+    // console.log("hi")
     if(selected.length == 1){
         clear() 
         updateGrid() 
@@ -164,7 +164,7 @@ function updateGrid(){
             }
             else if(selectedCoords.includes(`${i}_${j}`)){
                 document.getElementById(`${i}_${j}`).setAttribute("class", "element selected")
-            }else if(first_bfs.includes(`${i}_${j}`) || last_bfs.includes(`${i}_${j}`)){
+            }else if( last_bfs.includes(`${i}_${j}`)){
                 document.getElementById(`${i}_${j}`).setAttribute("class", "element valid")
             }
             else{
