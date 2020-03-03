@@ -3,41 +3,36 @@ const body = document.getElementById("body")
 let words = ["EEEEE", "EEEEEEE"] // List of words
 let grid = []
 
+let difficulty = undefined
 let selected = []
 let validMoves = []
 
 document.addEventListener("DOMContentLoaded", function (event) {
-  populate()
-
-  document.querySelector(".contentWindow").addEventListener("click", (e) => {
-      if(e.target.className !== undefined){ //
-          if(selected.length == 0){ //First element in sequence?
-             newSequence(getCords(e.target.id))
-          }else if(selected.length > 0 && e.target.id == selected[selected.length -1][0]){ //Unselects from first element
-                delMostRecent()
-                updateGrid()
-          } else if (selected.length > 19){ // Clears if selected length is greater than 19
-              clear()
-              updateGrid()
-          }else if(validMoves.includes(e.target.id)){ //
-              addSelection(getCords(e.target.id))
-          }
-          else{
-            newSequence(getCords(e.target.id))
-          }
-
-          let result = selected.map(e => e[1]).join("")
-          document.querySelector("#display_word").innerText = result
-
-          if(words.includes(result)){
-              console.log("found!")
-          }
-      }
-  })
+   populate("medium") //Populates
+   loadContentWindowFunctions()
 })
 
-function populate(){
-    let grid = [...Array(13)].map(e => Array(13).fill(0))
+function populate(gridType){ //Takes "easy", "medium", "hard" as arguements
+    let n = undefined
+
+    switch(gridType){
+        case "easy":
+            n = 13
+        break;
+        case "medium":
+            n = 16
+        break;
+        case "hard":
+            n = 20
+        break;
+    }
+
+    if(n == undefined){
+        console.log("invalid input")
+        return
+    }
+
+    let grid = [...Array(n)].map(e => Array(n).fill(0))
     let letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
     //letters = letters.map(e => e = "E")
     for(let i = 0; grid.length > i; i++){
@@ -47,9 +42,10 @@ function populate(){
             newEle.setAttribute("class", "element")
             newEle.innerText = grid[i][j]
             newEle.id = `${i}_${j}`
-            document.querySelector("#easy-grid").appendChild(newEle)
+            document.querySelector(`#${gridType}-grid`).appendChild(newEle)
         }
     }
+    difficulty = `${gridType}-grid`
 }
 
 function clear(){
@@ -103,7 +99,7 @@ function delMostRecent(){
 }
 
 function updateGrid(){
-    let grids = document.querySelector("#easy-grid")
+    let grids = document.querySelector(`#${difficulty}`)
     let selectedCoords = selected.map(e => e[0])
     for(let i = 0; Math.sqrt(grids.childNodes.length) -1 > i; i++){
         for(let j = 0; Math.sqrt(grids.childNodes.length) - 1 > j; j++){
@@ -121,3 +117,31 @@ function updateGrid(){
         }
     }
 } 
+
+function loadContentWindowFunctions(){
+    document.querySelector(".contentWindow").addEventListener("click", (e) => {
+        if(e.target.className !== undefined){ //
+            if(selected.length == 0){ //First element in sequence?
+               newSequence(getCords(e.target.id))
+            }else if(selected.length > 0 && e.target.id == selected[selected.length -1][0]){ //Unselects from first element
+                  delMostRecent()
+                  updateGrid()
+            } else if (selected.length > 19){ // Clears if selected length is greater than 19
+                clear()
+                updateGrid()
+            }else if(validMoves.includes(e.target.id)){ //
+                addSelection(getCords(e.target.id))
+            }
+            else{
+              newSequence(getCords(e.target.id))
+            }
+  
+            let result = selected.map(e => e[1]).join("")
+            document.querySelector("#display_word").innerText = result
+  
+            if(words.includes(result)){
+                console.log("found!")
+            }
+        }
+    })
+}
