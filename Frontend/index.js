@@ -233,8 +233,7 @@ function updateGrid(){
         for(let j = 0; Math.sqrt(grids.childNodes.length) > j; j++){
             if(selectedCoords[selectedCoords.length - 1] == `${i}_${j}`){
                 document.getElementById(`${i}_${j}`).setAttribute("class", "element del")
-            }
-            else if(selectedCoords.includes(`${i}_${j}`)){
+            }else if(selectedCoords.includes(`${i}_${j}`)){
                 document.getElementById(`${i}_${j}`).setAttribute("class", "element selected")
             }else if( validMoves.includes(`${i}_${j}`)){
                 document.getElementById(`${i}_${j}`).setAttribute("class", "element valid")
