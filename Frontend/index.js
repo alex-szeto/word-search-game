@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         sampleWords("easy")
         populateWordList()
     }, 3000)
+})
 
 document.addEventListener("click", function(e){
     // console.dir(e.target.dataset.id)
