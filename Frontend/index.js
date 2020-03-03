@@ -1,6 +1,6 @@
 const body = document.getElementById("body")
-const USERID = "1"
-const USERNAME = "Tom"
+const USERID = ""
+const USERNAME = ""
 
 let baseUrl = "http://localhost:3000"
 
@@ -164,6 +164,7 @@ function populateWordList(){ //Words must not be empty, invoke sampleWords prior
 
     words.forEach(renderWord =>{
         let displayElement = document.createElement("LI")
+        displayElement.className = "wordListLi"
         displayElement.innerHTML = `${renderWord}`
         masterList.appendChild(displayElement)
     })
@@ -191,12 +192,12 @@ function transitionToGrid(gridType){ //Call this method, with it's arguement, a 
     </div>
     <div id="${gridType}-grid" class="contentWindow"></div>
     
-    <div class="wordList">
-        <h1>High Scores</h1>
-        <ul class="wordsUl"></ul>
-    </div>
     </div>
     `
+    // <div class="wordList">
+    //     <h1>High Scores</h1>
+    //     <ul class="wordsUl"></ul>
+    // </div>
 
     let highScoresRightDisplay = document.createElement("div") //Creates Highscores on Right
     highScoresRightDisplay.setAttribute("class", "contentRight")
