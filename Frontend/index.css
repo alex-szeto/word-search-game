@@ -115,13 +115,13 @@ body{
     margin: 10px;
     flex-direction: column;
 }
+
 .timerBar{
     display: flex;
     background: #d8dde0;
     border-style: solid;
     border-width: 1px;
     border-color: rgb(59, 55, 55);
-    
     border-radius: 4px;
     justify-content: space-between;
 }

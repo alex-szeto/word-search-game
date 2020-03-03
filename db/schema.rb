@@ -17,18 +17,10 @@ ActiveRecord::Schema.define(version: 2020_02_28_154548) do
 
   create_table "game_sessions", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "game_id"
+    t.integer "puzzle_setting_id"
     t.integer "score"
     t.string "time_completed"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "game_sessons", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "game_id"
-    t.integer "score"
-    t.string "time_completed"
+    t.integer "timer"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -37,7 +29,6 @@ ActiveRecord::Schema.define(version: 2020_02_28_154548) do
     t.string "difficulty"
     t.string "grid_size"
     t.boolean "match_by", default: true
-    t.integer "timer"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -49,7 +40,7 @@ ActiveRecord::Schema.define(version: 2020_02_28_154548) do
   end
 
   create_table "words", force: :cascade do |t|
-    t.integer "game_id"
+    t.integer "puzzle_setting_id"
     t.string "word"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
