@@ -27,10 +27,10 @@ let hardWords = []
 document.addEventListener("DOMContentLoaded", function (event) {
     populateWords()
 
-    /*setInterval(function(){ //TEsts populating wordlist
+    setInterval(function(){ //TEsts populating wordlist
         sampleWords("easy")
         populateWordList()
-    }, 3000)*/ 
+    }, 3000)
 
     transitionToGrid("hard") 
 })
@@ -269,6 +269,15 @@ function loadContentWindowFunctions(){
             if(words.includes(result)){
                 console.log("found!")
             }
+        }
+    })
+
+    document.querySelector("#displayWords").addEventListener("click", function(e){
+        if(e.target.parentNode.id == "displayWords"){
+            e.target.innerHTML = `<strike>${e.target.innerHTML}</strike>`
+        }
+        if(e.target.parentNode.parentNode.id == "displayWords"){
+            e.target.parentNode.innerHTML = e.target.innerText
         }
     })
 }
