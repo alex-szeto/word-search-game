@@ -1,19 +1,71 @@
 const body = document.getElementById("body")
 
+//GRID VARIABLES
 let words = ["EEEEE", "EEEEEEE"] // List of words
 let grid = []
 
 let difficulty = undefined
 let selected = []
-let validMoves = []
+let validMoves = [] 
+let renderDisplay = document.querySelector("#renderDisplay")
+//GRID VARIABLES END HERE
 
+
+//*DOM FUNCTIONS
 document.addEventListener("DOMContentLoaded", function (event) {
-   populate("medium") //Populates
-   loadContentWindowFunctions()
-})
 
-function populate(gridType){ //Takes "easy", "medium", "hard" as arguements
-    let n = undefined
+    transitionToGrid("hard") 
+})
+//DOM FUNCTIONS END HERE
+
+//SELECTION FUNCTIONS
+
+
+//SELECTION FUNCTIONS END HERE
+
+
+//* GRID FUNCTIONS
+function transitionToGrid(gridType){ //Call this method, with it's arguement, a difficulty to transition to grid.
+    if(gridType !== "easy" && gridType !== "medium" && gridType !== "hard") return //Early exit if difficulty not valid
+
+    let gridMainContent = document.createElement("div") //Creates grid
+    gridMainContent.innerHTML = `
+    <div class="timerBar">
+        <div id="timer"> <h3>Timer:</h3>
+            <div class="timer">
+            </div>
+        </div>
+        <div id="word">
+            <h3>Word:</h3>
+            <div id="display_word"class="wordBox">
+
+            </div>
+        </div>
+    </div>
+    <div id="${gridType}-grid" class="contentWindow"></div>
+    
+    <div class="wordList">
+        <h1>Words li</h1>
+        <ul class="wordsUl"></ul>
+    </div>
+    </div>
+    `
+
+    let highScoresRightDisplay = document.createElement("div") //Creates Highscores on Right
+    highScoresRightDisplay.setAttribute("class", "contentRight")
+
+    highScoresRightDisplay.innerHTML = `
+        <h1>High Scores</h1>
+    `
+
+    renderDisplay.parentNode.appendChild(highScoresRightDisplay)
+
+    renderDisplay.appendChild(gridMainContent)
+    populate(gridType)
+}
+
+function populate(gridType){ //Populates grid & adds click support. Note: GRID MUST BE CREATED PRIOR TO CALLING
+    let n = undefined //Takes "easy", "medium", "hard" as arguements
 
     switch(gridType){
         case "easy":
@@ -46,6 +98,7 @@ function populate(gridType){ //Takes "easy", "medium", "hard" as arguements
         }
     }
     difficulty = `${gridType}-grid`
+    loadContentWindowFunctions() //Loads content functionality
 }
 
 function clear(){
@@ -145,3 +198,4 @@ function loadContentWindowFunctions(){
         }
     })
 }
+//* GRID FUNCTIONS END HERE
