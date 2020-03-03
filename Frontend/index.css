@@ -40,6 +40,11 @@ body{
     color: white
 }
 
+#navLiRight{
+    align-items: right;
+    text-align: right;
+}
+
 .navLi:hover{
     background-color: #456f93;
 }
@@ -194,6 +199,7 @@ h3{
 .del{
     background-color: lightcoral;
 }
+
 
 /* theme
 #eafffa
