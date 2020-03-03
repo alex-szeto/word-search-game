@@ -1,4 +1,6 @@
 const body = document.getElementById("body")
+const USERID = "1"
+const USERNAME = "Tom"
 
 //GRID VARIABLES
 let words = ["EEEEE", "EEEEEEE"] // List of words
@@ -13,15 +15,87 @@ let renderDisplay = document.querySelector("#renderDisplay")
 
 //*DOM FUNCTIONS
 document.addEventListener("DOMContentLoaded", function (event) {
-
-    transitionToGrid("hard") 
+    // transitionToGrid("hard") 
 })
+
+document.addEventListener("click", function(e){
+    // console.dir(e.target.dataset.id)
+    switch (e.target.dataset.id) {
+        case "home":
+            renderHome()
+            break;
+        case "word-data":
+            renderWordData()
+            break;
+        case "login":
+            renderLogin()
+            break;
+        case "rules":
+            renderRules()
+            break;
+        case "new-game-hard":
+            transitionToGrid("hard")
+            break;
+        default:
+            break;
+    }
+})
+
 //DOM FUNCTIONS END HERE
 
-//SELECTION FUNCTIONS
+// MENU FUNCTIONS
+const renderHome = () => {
+    // when home is selected returns to the home page
+    // welcome user and asks them if they want to play a game
+    let wordList = document.getElementsByClassName("contentRight")[0]
+    if (wordList){
+        wordList.remove()
+    }
+    if (USERID){
+
+        renderDisplay.innerHTML = `
+        <div class="menu">
+            <h1 class="menuItem">Welcome, ${USERNAME}</h1>
+
+            <h1 class="menuItem">Would you like to play a new game?</h1>
+            
+            <button class="menuItem"> New Game </button>
+        </div>
+        `
+    } else {
+        renderDisplay.innerHTML = `
+        <div class="menu">
+            <h1 class="menuItem">Hello!</h1>
+            <h1 class="menuItem">Welcome to Wordsley, a word search game, please sign in below</h1>
+            <form class="menuItem">
+                <label for="username">Username:</label><br>
+                <input type="text" id="username" name="username">
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        `
+    }
+}
+const renderWordData = () => {
+    console.log("worddata")
+    // going to give a user links to open another window showing word selection data
+}
+const renderLogin = () => {
+    console.log("login")
+    // brings them to the eddit username page
+}
+const renderRules = () => {
+    console.log("rules")
+    // renders the rules page
+}
+
+// MENU FUNCTIONS END HERE
 
 
-//SELECTION FUNCTIONS END HERE
+//SETTING SELECTION FUNCTIONS
+
+
+//SETTING SELECTION FUNCTIONS END HERE
 
 
 //* GRID FUNCTIONS
@@ -38,14 +112,14 @@ function transitionToGrid(gridType){ //Call this method, with it's arguement, a 
         <div id="word">
             <h3>Word:</h3>
             <div id="display_word"class="wordBox">
-
             </div>
+            <button> Check Word </button>
         </div>
     </div>
     <div id="${gridType}-grid" class="contentWindow"></div>
     
     <div class="wordList">
-        <h1>Words li</h1>
+        <h1>High Scores</h1>
         <ul class="wordsUl"></ul>
     </div>
     </div>
@@ -55,7 +129,7 @@ function transitionToGrid(gridType){ //Call this method, with it's arguement, a 
     highScoresRightDisplay.setAttribute("class", "contentRight")
 
     highScoresRightDisplay.innerHTML = `
-        <h1>High Scores</h1>
+        <h1>Word List:</h1>
     `
 
     renderDisplay.parentNode.appendChild(highScoresRightDisplay)

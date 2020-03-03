@@ -1,9 +1,21 @@
 body{
     display: flex;
-    width: 100vw;
-    height: 100vh;
+    flex-basis: auto;
+    /* width: 120vw; */
+    /* height: 200vh;  */
     flex-direction: column;
     margin: 0;
+    flex: 1 ;
+    min-height: 100vh;
+    background: #d8dde0;
+}
+
+.bodySections{
+    display: flex;
+    background: #d8dde0;
+    align-content: stretch;
+    height: 100%;
+    min-height: 100vh;
 }
 
 .nav{
@@ -44,17 +56,10 @@ body{
     background-color: #456f93;
 }
 
-.bodySections{
-    display: flex;
-    background: #d8dde0;
-    align-content: stretch;
-    height: 100vh;
-}
 
 .sideNav{
     display:flex;
     width: 120px;
-    /* height: 700px; */
     background-color: #adcce7;
     flex-direction: column;
 }
@@ -71,14 +76,15 @@ body{
     display: flex;
     list-style-type: none;
     padding: 0;
+    margin-top: 0;
     flex-direction: column;
-    /* get the side nav to show no  */
+    /* get the side nav to show no   */
 }
 .sideLi{
     display: flex;
     text-align: center;
     padding: 10px;
-    border-top: 2px rgb(59, 55, 55) solid;
+    border-bottom: 2px rgb(59, 55, 55) solid;
     border-width: 2px;
 }
 .sideLi:hover{
@@ -93,20 +99,7 @@ body{
     border-radius: 4px;
 } */
 
-.contentRight{
-    display: flex;
-    background: #f0f4f8;
-    border-style: solid;
-    border-width: 1px;
-    border-color: purple;
-    margin: 10px;
-    justify-self: flex-start;
-    max-width: 150px;
-    max-height: 50vh;
-    /* align-self: flex-end; */
-}
-
-.verticalContent{
+.verticalContent{ /* central content window */
     display: flex;
     background: #d8dde0;
     border-style: solid;
@@ -114,6 +107,8 @@ body{
     border-color: green;
     margin: 10px;
     flex-direction: column;
+    min-width: 80vw;
+    min-height: 60vh;
 }
 
 .timerBar{
@@ -152,8 +147,8 @@ body{
     border-radius: 6px;
     border-color: blue;
     margin: 10px;
-    min-width: 650px;
-    min-height: 700px;
+    /* min-width: 650px;
+    min-height: 700px; */
 }
 .wordList{
     display: flex;
@@ -169,42 +164,78 @@ h3{
 }
 
 #easy-grid {
-    display: grid;
-    grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px ;
-    
-  }
+display: grid;
+grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px ;
+}
 
-  #medium-grid {
+#medium-grid {
     display: grid;
     grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
-  }
+}
 
-  #hard-grid {
+#hard-grid {
     display: grid;
     grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
-  }
-
-  .element {
-    background-color: #f0f4f8;
-    border: 3px solid grey;
-    padding: 5px;
-    font-size: 30px;
-    text-align: center;
-  }
-
-  .selected{
-      background-color: darkgray;
-  }
-
-  .valid{
-    background-color: lightgreen;
+    flex: 1;
 }
+
+.element {
+background-color: #f0f4f8;
+border: 3px solid grey;
+padding: 5px;
+font-size: 30px;
+text-align: center;
+}
+
+.selected{
+    background-color: darkgray;
+}
+
+.valid{
+background-color: lightgreen;
+}
+
 #easy-grid:hover{
+    cursor: pointer;
+}
+#medium-grid:hover{
+    cursor: pointer;
+}
+#hard-grid:hover{
     cursor: pointer;
 }
 
 .del{
     background-color: lightcoral;
+}
+
+.menu{
+    display: flex;
+    background-color:  white;
+    border-color: pink;
+    border-width: 1px;
+    border-style: solid;
+    flex-basis: 1 1 auto;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
+.menuItem{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.contentRight{
+    display: flex;
+    background: #f0f4f8;
+    border-style: solid;
+    border-width: 1px;
+    border-color: purple;
+    margin: 10px;
+    justify-self: flex-start;
+    flex-basis: auto;
+    /* align-self: flex-end; */
 }
 
 
