@@ -40,11 +40,6 @@ body{
     color: white
 }
 
-#navLiRight{
-    align-items: right;
-    text-align: right;
-}
-
 .navLi:hover{
     background-color: #456f93;
 }
