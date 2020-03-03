@@ -12,7 +12,7 @@ let total = [arr, arr1, arr2, arr3, arr4, arr5, arr6, arr7]
 let words = total.join(" ")
 
 
-words = words.split(" ").filter(word => word.length >= 5 && 8 >= word.length)
+words = words.split(" ").filter(word => word.length >= 5 && 9 >= word.length)
 var wordlist = []
 
 for(let i = 0; words.length > i; i++){
@@ -32,12 +32,6 @@ let numberofWords = document.createElement("li")
 numberofWords.innerText = `Number of Words: ${wordlist.length}`
 document.querySelector("#stats").appendChild(numberofWords)
 
-//let letters = document.createElement("li")
-//numberofWords.innerText = `Number of Letters: ${wordlist.length}`
-//document.querySelector("#stats").appendChild(numberofWords)
-
-console.log(wordlist)
-console.log(letterDistribution(wordlist))
 populate(wordlist)
 
 function editDistance(word1, word2) {
@@ -72,7 +66,8 @@ function letterDistribution(wordlist){
         5:0,
         6:0,
         7:0,
-        8:0
+        8:0,
+        9:0
     }
     let distribution = {
         'a':[0, 0],

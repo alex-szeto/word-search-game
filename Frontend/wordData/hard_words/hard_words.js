@@ -16,32 +16,13 @@ words = words.split(" ").filter(word => word.length >= 8)
 var wordlist = []
 
 for(let i = 0; words.length > i; i++){
-    let pass = true
-
-    /*for(let j = 0; wordlist.length > j; j++){
-        if(!(editDistance(words[i], wordlist[j]))) {
-            pass = false
-        }
-    }
-    if(pass){*/
-        if(words[i].length == 18){
-            console.log(words[i])
-        }
-
-        wordlist.push(words[i])
-    /*}*/
+    wordlist.push(words[i])
 }
 
 let numberofWords = document.createElement("li")
 numberofWords.innerText = `Number of Words: ${wordlist.length}`
 document.querySelector("#stats").appendChild(numberofWords)
 
-//let letters = document.createElement("li")
-//numberofWords.innerText = `Number of Letters: ${wordlist.length}`
-//document.querySelector("#stats").appendChild(numberofWords)
-
-console.log(wordlist)
-console.log(letterDistribution(wordlist))
 populate(wordlist)
 
 function editDistance(word1, word2) {

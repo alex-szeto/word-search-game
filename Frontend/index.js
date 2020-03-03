@@ -4,40 +4,26 @@ let words = ["EEEEE", "EEEEEEE"] // List of words
 let grid = []
 
 let selected = []
-let last_bfs = []
-//let first_bfs = []
+let validMoves = []
 
 document.addEventListener("DOMContentLoaded", function (event) {
   populate()
 
   document.querySelector(".contentWindow").addEventListener("click", (e) => {
-    //console.log(selected)
-      if(e.target.className !== undefined){ //|| e.target.className === "element selected" || e.target.className){
+      if(e.target.className !== undefined){ //
           if(selected.length == 0){ //First element in sequence?
-             bfsNewSeq(getCords(e.target.id))
-             //console.log(selected)
+             newSequence(getCords(e.target.id))
           }else if(selected.length > 0 && e.target.id == selected[selected.length -1][0]){ //Unselects from first element
-                delLast()
+                delMostRecent()
                 updateGrid()
           } else if (selected.length > 19){ // Clears if selected length is greater than 19
               clear()
               updateGrid()
+          }else if(validMoves.includes(e.target.id)){ //
+              addSelection(getCords(e.target.id))
           }
-          /*else if(selected.length == 1 && last_bfs.includes(e.target.id)){ //Second element in sequence
-            bfsSecond(getCords(e.target.id))
-          }*/else if(last_bfs.includes(e.target.id)){
-              //console.log("bfs from starting point")
-              bfsLast(getCords(e.target.id))
-          }
-          /*else if(first_bfs.includes(e.target.id)){
-              bfsFirst(getCords(e.target.id))
-          }*/
-            /*else if(selected.length > 0 && e.target.id == selected[selected.length - 1][0]){ //Unselects from last element
-            delFirst()
-            updateGrid()
-          } */
           else{
-            bfsNewSeq(getCords(e.target.id))
+            newSequence(getCords(e.target.id))
           }
 
           let result = selected.map(e => e[1]).join("")
@@ -68,66 +54,39 @@ function populate(){
 
 function clear(){
     selected = []
-    last_bfs = []
-    //first_bfs = []
+    validMoves = []
 }
 
 function getCords(id){
     return [parseInt(id.match(/^\d+/)[0]), parseInt(id.match(/\d+$/)[0])]
 }
 
-function bfsNewSeq(xy){
+function newSequence(xy){
     clear()
     selected.push([`${xy[0]}_${xy[1]}`, document.getElementById(`${xy[0]}_${xy[1]}`).innerText]) //Example output ["3_6", "C"]
 
-    last_bfs.push(`${xy[0]+1}_${xy[1]}`)
-    last_bfs.push(`${xy[0]-1}_${xy[1]}`)
-    last_bfs.push(`${xy[0]}_${xy[1]+1}`)
-    last_bfs.push(`${xy[0]}_${xy[1]-1}`)
+    validMoves.push(`${xy[0]+1}_${xy[1]}`)
+    validMoves.push(`${xy[0]-1}_${xy[1]}`)
+    validMoves.push(`${xy[0]}_${xy[1]+1}`)
+    validMoves.push(`${xy[0]}_${xy[1]-1}`)
     updateGrid()
 }
 
-/*function bfsSecond(xy){ 
-    let id = [`${xy[0]}_${xy[1]}`]
-    last_bfs = last_bfs.filter(e => e != id)
-    selected.push([`${xy[0]}_${xy[1]}`, document.getElementById(id).innerText])
-    //console.log(selected)
-    if(!(selected.includes(`${xy[0]+1}_${xy[1]}`))){first_bfs.push(`${xy[0]+1}_${xy[1]}`)}
-    if(!(selected.includes(`${xy[0]-1}_${xy[1]}`))){first_bfs.push(`${xy[0]-1}_${xy[1]}`)}
-    if(!(selected.includes(`${xy[0]}_${xy[1]+1}`))){first_bfs.push(`${xy[0]}_${xy[1]+1}`)}
-    if(!(selected.includes(`${xy[0]}_${xy[1]-1}`))){first_bfs.push(`${xy[0]}_${xy[1]-1}`)}
-    updateGrid()
-}*/
-
-/*function bfsFirst(xy){
-    let coords = selected.map(e=> e[0])
-    if(coords.includes(`${xy[0]}_${xy[1]}`)){return}
-    first_bfs = []
-    let id = [`${xy[0]}_${xy[1]}`]
-    selected.push([`${xy[0]}_${xy[1]}`, document.getElementById(id).innerText])
-    if(!(selected.includes(`${xy[0]+1}_${xy[1]}`))){first_bfs.push(`${xy[0]+1}_${xy[1]}`)}
-    if(!(selected.includes(`${xy[0]-1}_${xy[1]}`))){first_bfs.push(`${xy[0]-1}_${xy[1]}`)}
-    if(!(selected.includes(`${xy[0]}_${xy[1]+1}`))){first_bfs.push(`${xy[0]}_${xy[1]+1}`)}
-    if(!(selected.includes(`${xy[0]}_${xy[1]-1}`))){first_bfs.push(`${xy[0]}_${xy[1]-1}`)}
-    updateGrid()
-}*/
-
-function bfsLast(xy){
+function addSelection(xy){
     let coords = selected.map(e=> e[0])
     if(coords.includes(`${xy[0]}_${xy[1]}`)){return}
 
-    last_bfs = []
+    validMoves = []
     let id = [`${xy[0]}_${xy[1]}`]
     selected.push([`${xy[0]}_${xy[1]}`, document.getElementById(id).innerText])
-    if(!(selected.includes(`${xy[0]+1}_${xy[1]}`))){last_bfs.push(`${xy[0]+1}_${xy[1]}`)}
-    if(!(selected.includes(`${xy[0]-1}_${xy[1]}`))){last_bfs.push(`${xy[0]-1}_${xy[1]}`)}
-    if(!(selected.includes(`${xy[0]}_${xy[1]+1}`))){last_bfs.push(`${xy[0]}_${xy[1]+1}`)}
-    if(!(selected.includes(`${xy[0]}_${xy[1]-1}`))){last_bfs.push(`${xy[0]}_${xy[1]-1}`)}
+    if(!(selected.includes(`${xy[0]+1}_${xy[1]}`))){validMoves.push(`${xy[0]+1}_${xy[1]}`)}
+    if(!(selected.includes(`${xy[0]-1}_${xy[1]}`))){validMoves.push(`${xy[0]-1}_${xy[1]}`)}
+    if(!(selected.includes(`${xy[0]}_${xy[1]+1}`))){validMoves.push(`${xy[0]}_${xy[1]+1}`)}
+    if(!(selected.includes(`${xy[0]}_${xy[1]-1}`))){validMoves.push(`${xy[0]}_${xy[1]-1}`)}
     updateGrid()
 }
 
-function delLast(){
-    // console.log("hi")
+function delMostRecent(){
     if(selected.length == 1){
         clear() 
         updateGrid() 
@@ -135,24 +94,13 @@ function delLast(){
     }
     selected.pop()
     let xy = getCords(selected[selected.length-1][0])
-    last_bfs = []
-    if(!(selected.includes(`${xy[0]+1}_${xy[1]}`))){last_bfs.push(`${xy[0]+1}_${xy[1]}`)}
-    if(!(selected.includes(`${xy[0]-1}_${xy[1]}`))){last_bfs.push(`${xy[0]-1}_${xy[1]}`)}
-    if(!(selected.includes(`${xy[0]}_${xy[1]+1}`))){last_bfs.push(`${xy[0]}_${xy[1]+1}`)}
-    if(!(selected.includes(`${xy[0]}_${xy[1]-1}`))){last_bfs.push(`${xy[0]}_${xy[1]-1}`)}
+    validMoves = []
+    if(!(selected.includes(`${xy[0]+1}_${xy[1]}`))){validMoves.push(`${xy[0]+1}_${xy[1]}`)}
+    if(!(selected.includes(`${xy[0]-1}_${xy[1]}`))){validMoves.push(`${xy[0]-1}_${xy[1]}`)}
+    if(!(selected.includes(`${xy[0]}_${xy[1]+1}`))){validMoves.push(`${xy[0]}_${xy[1]+1}`)}
+    if(!(selected.includes(`${xy[0]}_${xy[1]-1}`))){validMoves.push(`${xy[0]}_${xy[1]-1}`)}
     updateGrid()
 }
-
-/*function delFirst(){
-    selected.pop()
-    let xy = getCords(selected[selected.length - 1][0])
-    first_bfs = []
-    if(!(selected.includes(`${xy[0]+1}_${xy[1]}`))){first_bfs.push(`${xy[0]+1}_${xy[1]}`)}
-    if(!(selected.includes(`${xy[0]-1}_${xy[1]}`))){first_bfs.push(`${xy[0]-1}_${xy[1]}`)}
-    if(!(selected.includes(`${xy[0]}_${xy[1]+1}`))){first_bfs.push(`${xy[0]}_${xy[1]+1}`)}
-    if(!(selected.includes(`${xy[0]}_${xy[1]-1}`))){first_bfs.push(`${xy[0]}_${xy[1]-1}`)}
-    updateGrid()
-}*/
 
 function updateGrid(){
     let grids = document.querySelector("#easy-grid")
@@ -164,7 +112,7 @@ function updateGrid(){
             }
             else if(selectedCoords.includes(`${i}_${j}`)){
                 document.getElementById(`${i}_${j}`).setAttribute("class", "element selected")
-            }else if( last_bfs.includes(`${i}_${j}`)){
+            }else if( validMoves.includes(`${i}_${j}`)){
                 document.getElementById(`${i}_${j}`).setAttribute("class", "element valid")
             }
             else{
