@@ -190,6 +190,9 @@ h3{
   .valid{
     background-color: lightgreen;
 }
+#easy-grid:hover{
+    cursor: pointer;
+}
 
 .del{
     background-color: lightcoral;
