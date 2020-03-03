@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
           }else if(selected.length > 0 && e.target.id == selected[selected.length -1][0]){ //Unselects from first element
                 delLast()
                 updateGrid()
-          } else if (selected.length > 10){ // Clears if selected length is greater than 10
+          } else if (selected.length > 19){ // Clears if selected length is greater than 19
               clear()
               updateGrid()
           }
