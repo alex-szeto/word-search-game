@@ -7,13 +7,14 @@ let grid = []
 let difficulty = undefined
 let selected = []
 let validMoves = [] 
+let renderDisplay = document.querySelector("#renderDisplay")
 //GRID VARIABLES END HERE
 
 
 //*DOM FUNCTIONS
 document.addEventListener("DOMContentLoaded", function (event) {
 
-    //transitionToGrid("medium") 
+    transitionToGrid("hard") 
 })
 //DOM FUNCTIONS END HERE
 
@@ -25,11 +26,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 //* GRID FUNCTIONS
 function transitionToGrid(gridType){ //Call this method, with it's arguement, a difficulty to transition to grid.
-    if(gridType !== "easy" && gridType !== "medium" && gridType == "hard") return //Early exit if difficulty not valid
+    if(gridType !== "easy" && gridType !== "medium" && gridType !== "hard") return //Early exit if difficulty not valid
 
-    let k = document.createElement("div")
-    k.setAttribute("class", "verticalContent")
-    k.innerHTML = `
+    let gridMainContent = document.createElement("div") //Creates grid
+    gridMainContent.innerHTML = `
     <div class="timerBar">
         <div id="timer"> <h3>Timer:</h3>
             <div class="timer">
@@ -49,12 +49,18 @@ function transitionToGrid(gridType){ //Call this method, with it's arguement, a 
         <ul class="wordsUl"></ul>
     </div>
     </div>
-    <div class="contentRight">
-        <h1>High Scores</h1>
-    </div>
     `
-    let renderDisplay = document.querySelector("#renderDisplay")
-    renderDisplay.appendChild(k)
+
+    let highScoresRightDisplay = document.createElement("div") //Creates Highscores on Right
+    highScoresRightDisplay.setAttribute("class", "contentRight")
+
+    highScoresRightDisplay.innerHTML = `
+        <h1>High Scores</h1>
+    `
+
+    renderDisplay.parentNode.appendChild(highScoresRightDisplay)
+
+    renderDisplay.appendChild(gridMainContent)
     populate(gridType)
 }
 
