@@ -1,18 +1,36 @@
 const body = document.getElementById("body")
 
+let baseUrl = "http://localhost:3000"
+
 //GRID VARIABLES
-let words = ["EEEEE", "EEEEEEE"] // List of words
+let words = [] // List of words
 let grid = []
 
 let difficulty = undefined
 let selected = []
 let validMoves = [] 
 let renderDisplay = document.querySelector("#renderDisplay")
+
+
 //GRID VARIABLES END HERE
+
+//WORD VARIABLES
+
+let easyWords = []
+let mediumWords = []
+let hardWords = []
+
+//WORD VARIABLES END HERE
 
 
 //*DOM FUNCTIONS
 document.addEventListener("DOMContentLoaded", function (event) {
+    populateWords()
+
+    /*setInterval(function(){ //TEsts populating wordlist
+        sampleWords("easy")
+        populateWordList()
+    }, 3000)*/ 
 
     transitionToGrid("hard") 
 })
@@ -23,6 +41,62 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 //SELECTION FUNCTIONS END HERE
 
+
+// POPULATES WORDS
+function populateWords(){
+    fetch(`${baseUrl}/words`)
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(i => {
+            switch(i.puzzle_setting_id){
+                case 1:
+                    easyWords.push(i.word)
+                break;
+                case 2:
+                    mediumWords.push(i.word)
+                break;
+                case 3:
+                    hardWords.push(i.word)
+                break
+            }
+        })
+    })
+}
+
+function sampleWords(diffculty){ //populateWords() Must be invokved prior ot this
+    words = [] //Resets wordlist
+    switch(diffculty){
+        case "easy":
+            for(let i = 0; 6 > i; i++){
+                words.push(easyWords[Math.floor(Math.random() * easyWords.length)])
+            }
+        break;
+        case "medium":
+            for(let i = 0; 8 > i; i++){
+                words.push(mediumWords[Math.floor(Math.random() * mediumWords.length)])
+            }
+        break;
+        case "hard":
+            for(let i = 0; 10 > i; i++){
+                words.push(hardWords[Math.floor(Math.random() * hardWords.length)])
+            }
+        break;
+    }
+}
+
+function populateWordList(){ //Words must not be empty, invoke sampleWords prior to running this.
+    let masterList = document.querySelector("#displayWords")
+
+   masterList.innerHTML = `Word List` //Resets previous html
+
+    words.forEach(renderWord =>{
+        let displayElement = document.createElement("LI")
+        displayElement.innerHTML = `${renderWord}`
+        masterList.appendChild(displayElement)
+    })
+}
+
+// POPULATE WORD FUNCTION ENDS HERE
 
 //* GRID FUNCTIONS
 function transitionToGrid(gridType){ //Call this method, with it's arguement, a difficulty to transition to grid.
@@ -45,7 +119,7 @@ function transitionToGrid(gridType){ //Call this method, with it's arguement, a 
     <div id="${gridType}-grid" class="contentWindow"></div>
     
     <div class="wordList">
-        <h1>Words li</h1>
+        <h1>High Scores</h1>
         <ul class="wordsUl"></ul>
     </div>
     </div>
@@ -55,12 +129,13 @@ function transitionToGrid(gridType){ //Call this method, with it's arguement, a 
     highScoresRightDisplay.setAttribute("class", "contentRight")
 
     highScoresRightDisplay.innerHTML = `
-        <h1>High Scores</h1>
+        <h1 id="displayWords"> Word List</h1>
     `
 
     renderDisplay.parentNode.appendChild(highScoresRightDisplay)
 
     renderDisplay.appendChild(gridMainContent)
+    //populateWordList()
     populate(gridType)
 }
 
@@ -154,8 +229,8 @@ function delMostRecent(){
 function updateGrid(){
     let grids = document.querySelector(`#${difficulty}`)
     let selectedCoords = selected.map(e => e[0])
-    for(let i = 0; Math.sqrt(grids.childNodes.length) -1 > i; i++){
-        for(let j = 0; Math.sqrt(grids.childNodes.length) - 1 > j; j++){
+    for(let i = 0; Math.sqrt(grids.childNodes.length) > i; i++){
+        for(let j = 0; Math.sqrt(grids.childNodes.length) > j; j++){
             if(selectedCoords[selectedCoords.length - 1] == `${i}_${j}`){
                 document.getElementById(`${i}_${j}`).setAttribute("class", "element del")
             }
