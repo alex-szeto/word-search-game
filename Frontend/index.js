@@ -337,11 +337,82 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
         }
     }
 
-    words.forEach((val, index)=> {
-        for(let i = 0; val.length > i; i++){
-            document.getElementById(`${index}_${i}`).innerText = val[i]//.toString().toUpperCase()
+    let placed = []
+    switch(gridType){
+        case "easy":
+        let vertical = []
+        let verticalObstacles = {}
+        for(let i = 0; 13 > i; i++){
+            verticalObstacles[i] = []
         }
-    })
+
+            words.forEach((val)=> {
+                if(Math.random() > 0.5){
+                let rand = Math.floor(Math.random() * 13)
+                while(placed.includes(rand)){
+                    rand = Math.floor(Math.random() * 13)
+                }
+                placed.push(rand)
+
+                let startingPos = Math.floor(Math.random() * (13-val.length))
+
+                if(Math.random() > 0.3){
+                    for(let i = 0; val.length > i; i++){
+                    document.getElementById(`${rand}_${startingPos + i}`).innerText = val[i].toString().toUpperCase()
+                    verticalObstacles[rand].push(startingPos + i)//rand
+                }
+                } else{
+                    for(let i = 0; val.length > i; i++){
+                        document.getElementById(`${rand}_${startingPos + i}`).innerText = val[val.length - i - 1].toString().toUpperCase()
+                        verticalObstacles[rand].push(startingPos + i)//rand
+                    }
+                }
+                } else{
+                    vertical.push(val)
+                }
+            })
+            let alreadyPlaced = []
+            //console.log(verticalObstacles)
+            for(let i = 0; vertical.length > i; i++){
+                let rand = Math.floor(Math.random() * (13 -vertical[i].length))
+                let column = Math.floor(Math.random() * (13 -vertical[i].length))
+                let valid = false
+            
+                while(valid == false){
+                    let sequence = true
+                    for(let j = 0; vertical[i].length > j; j++){
+                        if(verticalObstacles[column + j].includes(rand) || alreadyPlaced.includes(rand)){
+                            sequence = false
+                        }
+                    }
+                    if(sequence == false){
+                        column = Math.floor(Math.random() * (13 -vertical[i].length))
+                        rand = Math.floor(Math.random() * (13 -vertical[i].length))
+                    }else if(sequence == true){
+                        alreadyPlaced.push(rand)
+                        valid = true
+                    }
+                }
+
+                if(Math.random() > 0.3){
+                    for(let j = 0; vertical[i].length > j; j++){
+                        document.getElementById(`${column + j}_${rand}`).innerText = vertical[i][j].toString().toUpperCase()
+                    }
+                } else{
+                    for(let j = 0; vertical[i].length > j; j++){
+                        document.getElementById(`${column + j}_${rand}`).innerText = vertical[i][vertical[i].length -j -1].toString().toUpperCase()
+                    }
+                }
+            }
+
+        break;
+        case "medium":
+        console.log("medium")
+        break;
+        case "hard":
+        console.log("hard")
+        break;
+    }
 
     difficulty = `${gridType}-grid`
     loadContentWindowFunctions() //Loads content functionality
@@ -436,11 +507,12 @@ function loadContentWindowFunctions(){
             }
   
             let result = selected.map(e => e[1]).join("")
+            //console.log(result)
             document.querySelector("#display_word").innerText = result
   
-            if(words.includes(result)){
+            if(words.includes(result.toLowerCase())){
                 document.querySelector("#displayWords").childNodes.forEach(i =>{
-                    if(i.innerText == result){
+                    if(i.innerText == result.toLowerCase()){
                         i.setAttribute("class", "completedWord")
                         i.innerHTML = `<strike>${i.innerText}</strike>`
                     }    
