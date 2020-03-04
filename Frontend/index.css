@@ -44,9 +44,9 @@ body{
     display: flex;
     align-items: center;
     padding: 10px;
-    border: rgb(59, 55, 55);
+    /* border: rgb(59, 55, 55);
     border-width: 1px;
-    border-style: solid;
+    border-style: solid; */
     text-align: center;
     border-radius: 4px;
     color: white
@@ -104,9 +104,9 @@ body{
 .verticalContent{ /* central content window */
     display: flex;
     background: #d8dde0;
-    border-style: solid;
+    /* border-style: solid;
     border-width: 1px;
-    border-color: green;
+    border-color: green; */
     margin: 10px;
     flex-direction: column;
     /* min-width: 80vw; */
@@ -149,9 +149,9 @@ body{
     display: flex;
     background: whitesmoke;
     border-style: solid;
-    border-width: 1px;
+    /* border-width: 1px;
     border-radius: 6px;
-    border-color: blue;
+    border-color: blue; */
     margin: 10px;
     /* min-width: 650px;
     min-height: 700px; */
@@ -160,9 +160,9 @@ body{
 .wordList{
     display: flex;
     background: whitesmoke;
-    border-style: solid;
+    /* border-style: solid;
     border-width: 1px;
-    border-color: red;
+    border-color: red; */
     margin: 10px;
 }
 
@@ -221,7 +221,7 @@ background-color: lightgreen;
 .menu{
     display: flex;
     background-color:  white;
-    border-color: pink;
+    /* border-color: pink; */
     border-width: 1px;
     border-style: solid;
     flex-basis: 1 1 auto;
@@ -242,7 +242,7 @@ background-color: lightgreen;
     background: #f0f4f8;
     border-style: solid;
     border-width: 1px;
-    border-color: purple;
+    /* border-color: purple; */
     margin: 10px;
     padding: 10px;
     justify-self: flex-start;
@@ -256,6 +256,39 @@ background-color: lightgreen;
     padding-left: 4px;
 }
 
+#configDesc{
+    border: lightslategray;
+    border-width: 2px;
+    border-style: solid;
+    
+}
+
+#difficulty{
+    background-color: lightsteelblue;
+    border-color: grey;
+    border-width: 5px;
+    border-style: solid;
+    margin: 50px;
+    font-size: 150%;
+}
+
+#submitConfig{
+    display: block; 
+    margin: 0 auto;
+    padding: 15px 32px;
+    background-color: green;
+    color: white;
+    font-size: 18px;
+}
+.submitButton{
+    display: block; 
+    margin: 0 auto;
+    margin-top: 5px;
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    font-size: 12px;
+}
 
 /* theme
 #eafffa
