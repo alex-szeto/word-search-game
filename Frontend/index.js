@@ -8,7 +8,7 @@ let baseUrl = "http://localhost:3000"
 let words = [] // List of words
 let grid = []
 
-let difficulty = undefined
+let difficulty = "easy"
 let selected = []
 let validMoves = [] 
 let renderDisplay = document.querySelector("#renderDisplay")
@@ -28,10 +28,11 @@ let hardWords = []
 //*DOM FUNCTIONS
 document.addEventListener("DOMContentLoaded", function (event) {
     populateWords()
+    renderSettingsWindow()
+    //renderLogin()
 })
 
 document.addEventListener("click", function(e){
-    // console.dir(e.target.dataset.id)
     switch (e.target.dataset.id) {
         case "home":
             renderHome()
@@ -349,11 +350,56 @@ function loadContentWindowFunctions(){
             e.target.parentNode.innerHTML = e.target.innerText
         }
     })
+
 }
 // GRID FUNCTIONS END HERE
 
 
 // SETTINGS WINDOW FUNCTIONS 
+function renderSettingsWindow() {
+    document.querySelector("#renderDisplay").innerHTML = `
+    <div id="difficulty">
+        <h2>&nbsp;Choose Difficulty</h2>
+
+        <div style="display: flex;">
+        <form id="difficultySetting">
+                <input type="radio" name="difficulty" value="easy" checked>
+                <label for="easy">Easy</label>
+                <input type="radio" name="difficulty" value="medium">
+                <label for="medium">Medium</label>
+                <input type="radio" name="difficulty" value="hard">
+                <label for="hard">Hard</label>
+        </form>
+        </div>
+        <br>
+        <h2>&nbsp;Set Timer</h2>
+        <div style="display: flex;">
+        <form id="timer">
+            <input type="radio" name="timer" value="10m">
+            <label for="10m">10 Min</label>
+            <input type="radio" name="timer" value="20m">
+            <label for="20m">20 Min</label>
+            <input type="radio" name="timer" value="30m" checked>
+            <label for="30m">30 Min</label>
+        </form>
+        </div>
+        <br>
+        <button id="submitConfig"> Start Game </button>
+
+        <p id="configDesc"><h3>Configuration Description:</h3> <br>
+            <li id="displaySize"><strong>Grid Size:</strong> 13x13 (169 Elements)</li>
+            <li id="displayTimer"> <strong>Timer:</strong> 30 Minutes</li>
+            <li id="displayWords"><strong>Word List Length:</strong> 6 Words</li>
+            <br>
+            <li id="editDistanceCheck">Words Will Be <strong>Especially Distinct</strong> From Each Other</li>
+            <li id="minLengthDisplay">Each Word Will Be <strong>3-6 Characters</strong> Long</li>
+            <li id="dataSetLength">Words Pulled From: <strong>Easy</strong> Dataset of <strong>896</strong> words</li>
+        </p>
+    </div>`
+    loadSettingsWindowFunctions()
+}
+
+
 function loadSettingsWindowFunctions() {
     document.querySelector("#timer").addEventListener("change", function(e){
         updateTimer(e.target.value)
@@ -361,6 +407,12 @@ function loadSettingsWindowFunctions() {
 
     document.querySelector("#difficultySetting").addEventListener("change", function(e){
         updateDifficulty(e.target.value)
+    })
+
+    document.querySelector("#submitConfig").addEventListener("click", function(e){
+        event.target.parentNode.remove()
+        transitionToGrid(`${difficulty}`)
+        populateWordList()
     })
 }
 
@@ -373,7 +425,8 @@ function updateDifficulty(newDifficulty){
     
     switch(newDifficulty){
         case 'easy':
-
+            difficulty = "easy"
+            sampleWords("easy")
             document.querySelector("#displaySize").innerHTML = `<strong>Grid Size:</strong> 13x13 (169 Elements)`
             document.querySelector("#displayWords").innerHTML = `<strong>Word List Length:</strong> 6 Words`
 
@@ -383,6 +436,8 @@ function updateDifficulty(newDifficulty){
         break;
 
         case 'medium':
+            difficulty = "medium"
+            sampleWords("medium")
             document.querySelector("#displaySize").innerHTML = `<strong>Grid Size:</strong> 16x16 (256 Elements)`
             document.querySelector("#displayWords").innerHTML = `<strong>Word List Length:</strong> 8 Words`
 
@@ -392,6 +447,8 @@ function updateDifficulty(newDifficulty){
         break;
 
         case 'hard':
+            difficulty = "hard"
+            sampleWords("hard")
             document.querySelector("#displaySize").innerHTML = `<strong>Grid Size:</strong> 20x20 (400 Elements)`
             document.querySelector("#displayWords").innerHTML = `<strong>Word List Length:</strong> 10 Words`
 
