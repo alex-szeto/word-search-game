@@ -60,7 +60,7 @@ body{
 
 .sideNav{
     display:flex;
-    width: 120px;
+    min-width: 120px;
     background-color: #adcce7;
     flex-direction: column;
 }
@@ -249,6 +249,52 @@ background-color: lightgreen;
     margin: 50px;
     font-size: 150%;
 }
+
+#signUpMenu{
+    margin: 10px;
+}
+
+#rulesButton{
+    max-height: 20px;
+    max-width: 20px;
+    display: flex;
+    align-self: flex-end;
+    justify-self: flex-start;
+}
+#rulesButton:hover{
+    background-color: red;
+    cursor: pointer;
+}
+.rulesH3{
+    margin: 0;
+    display: flex;
+    align-self: center;
+    justify-self: center;
+}
+.rulesElements{
+    display: flex;
+    background-color: lightsteelblue;
+    border-color: rgb(173, 166, 166);
+    border-width: 5px;
+    border-left: 0px;
+    border-right: 0px;
+    border-style: solid;
+    flex-basis: 1 1 auto;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    margin-top: 10px;
+}
+.rulesLi{
+    margin-bottom: 6px;
+    border-bottom: 2px;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-color: lightslategray;
+    border-style: dotted;
+}
+
 .submitButton{
     display: block; 
     margin: 0 auto;

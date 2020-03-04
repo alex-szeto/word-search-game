@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 })
 
 document.addEventListener("click", function(e){
+    console.log(e.target)
     switch (e.target.dataset.id) {
         case "home":
             renderHome()
@@ -52,20 +53,28 @@ document.addEventListener("click", function(e){
             renderSignUp()
             break;
         case "logout":
-            renderLogout()
+            logout()
             break;
         case "rules":
             renderRules()
             break;
-        case "new-game-hard":
-            transitionToGrid("hard")
+        case "rulesExit":
+            renderHome()
             break;
+        // case "new-game-hard":
+        //     transitionToGrid("hard")
+        //     break;
         case "submit-new-game":
             renderSettingsWindow()
             break;
-        case "submit-username":
+        case "login-username":
             e.preventDefault()
-            usernameFetch(document.querySelector("#username").value)
+            getUsername(document.querySelector("#login-username").value)
+            //usernameFetch(e.target.parentNode.children[2].value)
+            break;
+        case "signup-username":
+            e.preventDefault()
+            postSignUp(document.querySelector("#signup-username").value)
             //usernameFetch(e.target.parentNode.children[2].value)
             break;
         default:
@@ -92,11 +101,9 @@ const renderHome = () => {
             <h1 class="menuItem">Would you like to play a new game?</h1>
             
             <button class="submitButton" data-id="submit-new-game"> New Game </button>
-            <button class="submitButton" data-id="logout"> Logout </button>
-            <button class="submitButton" data-id="edit-username"> Edit Username </button>
-            <button class="submitButton" data-id="delete-username"> Delete Username </button>
-        </div>
         `
+        // <button class="submitButton" data-id="edit-username"> Edit Username </button>
+        //     <button class="submitButton" data-id="delete-username"> Delete Username </button>
     } else {
         renderDisplay.innerHTML = `
         <div class="menu">
@@ -104,8 +111,8 @@ const renderHome = () => {
             <h1 class="menuItem">Welcome to Wordsley, a word search game, please sign in below</h1>
             <form class="menuItem">
                 <label for="username">Username:</label><br>
-                <input type="text" id="username" name="username" >
-                <input type="submit" value="Submit" data-id="submit-username">
+                <input type="text" id="login-username" name="username" >
+                <input type="submit" value="Submit" data-id="login-username">
             </form>
             <p class="menuItem"> Don't have an account yet? <a href="" data-id="sign-up"> Sign up </a> </p>
         </div>
@@ -113,7 +120,7 @@ const renderHome = () => {
     }
 }
 const login = document.getElementById("login-status")
-const renderLogout = () => {
+const logout = () => {
     USERNAME = ""
     USERID = ''
     login.innerText = "Login"
@@ -126,20 +133,64 @@ const renderWordData = () => {
     // going to give a user links to open another window showing word selection data
 }
 const renderSignUp = () => {
-    
+    renderDisplay.innerHTML = `
+        <div class="menu">
+            <h1 class="menuItem">Hello!</h1>
+            <h1 class="menuItem">Welcome to Wordsley, a word search game, please sign in below</h1>
+            <h4 class="menuItem" id="signUpMenu">Create Username:</h4>
+            <form class="menuItem" id="signUpMenu">
+                <label for="username">Username:</label><br>
+                <input type="text" id="signup-username" name="username" >
+                <input type="submit" value="Sign up" data-id="signup-username">
+            </form>
+        </div>
+        `
 }
 const renderRules = () => {
-    console.log("rules")
-    // renders the rules page
+    renderDisplay.innerHTML = `
+        <div class="menu">
+
+            <button id="rulesButton" data-id="rulesExit">x</button>
+            <h1 class="menuItem">Rules!</h1>
+            <div class="rulesElements">
+                <h3 class="rulesH3"> Settings: </h3>
+                <ul>
+                    <li class="rulesLi">Choose your difficulty! But beware - the harder your choice the larger the grid!</li>
+                    <li class="rulesLi">Set your time! But beware - the lower the harder the game!</li>
+                </ul>
+            </div>
+            <div class="rulesElements">
+                <h3 class="rulesH3"> Gameplay: </h3>
+                <ol>
+                    <li class="rulesLi">The game has begun! Review the game layout. At the top left you will notice a timer counting down! The game is on! Once the time runs out the game is over.</li>
+                    <li class="rulesLi">At the top left you can find the word bar. As you select words you will see them come into being in this bar. You can check the word against your wordlist by pressing "Check Word" or clear your word by pressing "Reset Word"</li>
+                    <li class="rulesLi">The game board consists of what appears to be random letters! The words are hidden here. Try clicking on the letters, they turn grey and green squares appaer next to them! The green squares indicate places you can click! Note: you can't click past the board, on words that have been found, or on letters you've already selected! If you find a word, it should turn green! If not try clicking "Check Word"</li>
+                    <li class="rulesLi">Your word list resides on the right side of your game board. You might notice it labeled "Word List". It is your objective to find these words as fast as possible!</li>
+                </ol>
+            </div>
+
+
+        `
 }
-const usernameFetch = (username) => {
+const getUsername = (username) => {
+    
+    fetch(`${baseUrl}/users/${username}`)
+    .then(resp => resp.json())
+    .then(user => {
+        USERNAME = user.username
+        USERID = user.id
+        login.innerText = "Logout"
+        login.dataset.id = "logout"
+        renderHome()
+    })
+}
+const postSignUp = (username) => {
     let user = {username: username}
     console.log(user)
     fetch(`${baseUrl}/users`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
           },
         body: JSON.stringify(user)
     })
@@ -151,6 +202,7 @@ const usernameFetch = (username) => {
         login.dataset.id = "logout"
         renderHome()
     })
+    
 }
 
 // MENU FUNCTIONS END HERE
