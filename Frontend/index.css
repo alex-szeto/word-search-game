@@ -220,27 +220,33 @@ background-color: lightgreen;
 
 .menu{
     display: flex;
-    background-color:  white;
-    /* border-color: pink; */
-    border-width: 1px;
+    background-color: lightsteelblue;
+    border-color: rgb(173, 166, 166);
+    border-width: 5px;
     border-style: solid;
     flex-basis: 1 1 auto;
     justify-content: center;
     align-content: center;
     flex-direction: column;
-    min-height: 50vh;
+    min-width: 60vw;
+    min-height: 60vh;
 }
 
 .menuItem{
     display: flex;
     justify-content: center;
     align-content: center;
-    background-color: lightsteelblue;
-    border-color: grey;
-    border-width: 5px;
-    border-style: solid;
     margin: 50px;
     font-size: 150%;
+}
+.submitButton{
+    display: block; 
+    margin: 0 auto;
+    margin-top: 5px;
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    font-size: 12px;
 }
 
 .contentRight{
@@ -285,15 +291,6 @@ background-color: lightgreen;
     background-color: green;
     color: white;
     font-size: 18px;
-}
-.submitButton{
-    display: block; 
-    margin: 0 auto;
-    margin-top: 5px;
-    padding: 10px 20px;
-    background-color: green;
-    color: white;
-    font-size: 12px;
 }
 
 /* theme

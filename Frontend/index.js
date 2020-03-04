@@ -1,6 +1,6 @@
 const body = document.getElementById("body")
-const USERID = 1
-const USERNAME = "Tom"
+let USERID = 1
+let USERNAME = "Tom"
 
 let baseUrl = "http://localhost:3000"
 
@@ -47,6 +47,9 @@ document.addEventListener("click", function(e){
             break;
         case "login":
             renderLogin()
+            break;
+        case "logout":
+            renderLogout()
             break;
         case "rules":
             renderRules()
@@ -104,13 +107,18 @@ const renderHome = () => {
         `
     }
 }
+const renderLogout = () => {
+    USERNAME = ""
+    USERID = ''
+    renderHome()
+}
 const renderWordData = () => {
     console.log("worddata")
     // going to give a user links to open another window showing word selection data
 }
 const renderLogin = () => {
     console.log("login")
-    // brings them to the eddit username page
+    
 }
 const renderRules = () => {
     console.log("rules")
