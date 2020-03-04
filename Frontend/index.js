@@ -47,8 +47,9 @@ document.addEventListener("click", function(e){
         case "word-data":
             renderWordData()
             break;
-        case "login":
-            renderLogin()
+        case "sign-up":
+            e.preventDefault()
+            renderSignUp()
             break;
         case "logout":
             renderLogout()
@@ -64,7 +65,8 @@ document.addEventListener("click", function(e){
             break;
         case "submit-username":
             e.preventDefault()
-            usernameFetch(e.target.parentNode.children[2].value)
+            usernameFetch(document.querySelector("#username").value)
+            //usernameFetch(e.target.parentNode.children[2].value)
             break;
         default:
             break;
@@ -102,9 +104,10 @@ const renderHome = () => {
             <h1 class="menuItem">Welcome to Wordsley, a word search game, please sign in below</h1>
             <form class="menuItem">
                 <label for="username">Username:</label><br>
-                <input type="text" id="username" name="username">
+                <input type="text" id="username" name="username" >
                 <input type="submit" value="Submit" data-id="submit-username">
             </form>
+            <p class="menuItem"> Don't have an account yet? <a href="" data-id="sign-up"> Sign up </a> </p>
         </div>
         `
     }
@@ -122,7 +125,7 @@ const renderWordData = () => {
     console.log("worddata")
     // going to give a user links to open another window showing word selection data
 }
-const renderLogin = () => {
+const renderSignUp = () => {
     
 }
 const renderRules = () => {
@@ -131,7 +134,7 @@ const renderRules = () => {
 }
 const usernameFetch = (username) => {
     let user = {username: username}
-    
+    console.log(user)
     fetch(`${baseUrl}/users`, {
         method: "POST",
         headers: {
