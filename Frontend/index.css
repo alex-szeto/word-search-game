@@ -204,6 +204,14 @@ text-align: center;
 background-color: lightgreen;
 }
 
+.completedWord{
+ color: green;  
+}
+
+.solved{
+    background-color: green;
+}
+
 #easy-grid:hover{
     cursor: pointer;
 }

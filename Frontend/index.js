@@ -35,7 +35,7 @@ let hardWords = []
 //*DOM FUNCTIONS
 document.addEventListener("DOMContentLoaded", function (event) {
     populateWords()
-    renderHome()
+    renderSettingsWindow()
     //renderLogin()
 })
 
@@ -310,16 +310,22 @@ function transitionToGrid(gridType){ //Call this method, with it's arguement, a 
 
 function populate(gridType){ //Populates grid & adds click support. Note: GRID MUST BE CREATED PRIOR TO CALLING
     let n = undefined //Takes "easy", "medium", "hard" as arguements
+    let analysis = undefined
+    let letterSum = 0
+    let wordListCharLength = 0
 
     switch(gridType){
         case "easy":
             n = 13
+            analysis = easyWords
         break;
         case "medium":
             n = 16
+            analysis = mediumWords
         break;
         case "hard":
             n = 20
+            analysis = hardWords
         break;
     }
 
@@ -328,19 +334,67 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
         return
     }
 
+    let letterFrequency = new Array(26).fill(0)
+
+    analysis.forEach(elem => {
+        for(let i = 0; elem.length > i; i++){
+            letterFrequency[elem[i].charCodeAt(0)-97]++ //Converts letter to ASCII for array mapping
+            letterSum++
+        }
+    })
+
+    words.forEach(elem => { //Gets character length of wordlist
+        for(let i = 0; elem.length > i; i++){
+            wordListCharLength++
+        }
+    })
+
+    words.forEach(elem => { //Evens out character distribution if letter occurs less then 2% of the time
+        for(let i = 0; elem.length > i; i++){
+            if(letterSum/50 > letterFrequency[elem[i].charCodeAt(0)-97]){
+                letterFrequency[elem[i].charCodeAt(0)-97] = Math.floor(letterSum/33)
+            }
+        }
+    })
+
+    for(let i = 1; letterFrequency.length > i; i++){ // Makes array aggregate sum
+        letterFrequency[i] += letterFrequency[i-1]
+    }
+    letterSum = letterFrequency[letterFrequency.length - 1]
+
+
     let grid = [...Array(n)].map(e => Array(n).fill(0))
-    let letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-    //letters = letters.map(e => e = "E")
+    
+
+    function getLetter(){ //Gets letter from letter frequency, used in actual population
+        let rand = Math.floor(Math.random() * letterSum)
+        if(letterFrequency[0] > rand){
+            return 0
+        }
+        for(let i = 1; letterFrequency.length > i; i++){
+            if(rand >= letterFrequency[i-1] && letterFrequency[i] >= rand){
+                return i
+            }
+        }
+    }
+
     for(let i = 0; grid.length > i; i++){
         for(let j = 0; grid[0].length > j; j++){
             let newEle = document.createElement("div")
-            grid[i][j] = letters[Math.floor(Math.random() * 26)]
+            grid[i][j] = String.fromCharCode(getLetter()+65)
             newEle.setAttribute("class", "element")
             newEle.innerText = grid[i][j]
             newEle.id = `${i}_${j}`
             document.querySelector(`#${gridType}-grid`).appendChild(newEle)
         }
     }
+
+    words.forEach((val, index)=> {
+        for(let i = 0; val.length > i; i++){
+            document.getElementById(`${index}_${i}`).innerText = val[i]//.toString().toUpperCase()
+        }
+    })
+
     difficulty = `${gridType}-grid`
     loadContentWindowFunctions() //Loads content functionality
 }
@@ -400,6 +454,7 @@ function updateGrid(){
     let selectedCoords = selected.map(e => e[0])
     for(let i = 0; Math.sqrt(grids.childNodes.length) > i; i++){
         for(let j = 0; Math.sqrt(grids.childNodes.length) > j; j++){
+            if(document.getElementById(`${i}_${j}`) == null){continue}
             if(selectedCoords[selectedCoords.length - 1] == `${i}_${j}`){
                 document.getElementById(`${i}_${j}`).setAttribute("class", "element del")
             }else if(selectedCoords.includes(`${i}_${j}`)){
@@ -407,7 +462,7 @@ function updateGrid(){
             }else if( validMoves.includes(`${i}_${j}`)){
                 document.getElementById(`${i}_${j}`).setAttribute("class", "element valid")
             }
-            else{
+            else if(document.getElementById(`${i}_${j}`) != null){
                 document.getElementById(`${i}_${j}`).setAttribute("class", "element")
             }
         }
@@ -436,7 +491,19 @@ function loadContentWindowFunctions(){
             document.querySelector("#display_word").innerText = result
   
             if(words.includes(result)){
-                console.log("found!")
+                document.querySelector("#displayWords").childNodes.forEach(i =>{
+                    if(i.innerText == result){
+                        i.setAttribute("class", "completedWord")
+                        i.innerHTML = `<strike>${i.innerText}</strike>`
+                    }    
+                })
+
+                selected.forEach(e => {
+                    document.getElementById(`${e[0]}`).setAttribute("class", "element solved")
+                    document.getElementById(`${e[0]}`).id = ""
+                    clear()
+                    updateGrid()
+                })
             }
         }
     })
