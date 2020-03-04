@@ -135,16 +135,12 @@ function populateWords(){
     .then(res => res.json())
     .then(data => {
         data.forEach(i => {
-            switch(i.puzzle_setting_id){
-                case 1:
-                    easyWords.push(i.word)
-                break;
-                case 2:
-                    mediumWords.push(i.word)
-                break;
-                case 3:
-                    hardWords.push(i.word)
-                break
+            if(i.puzzle_setting_id % 3 == 1){
+                easyWords.push(i.word)
+            }else if(i.puzzle_setting_id % 3 == 2){ 
+                mediumWords.push(i.word)
+            }else if(i.puzzle_setting_id % 3 == 0){
+                hardWords.push(i.word)
             }
         })
     })
