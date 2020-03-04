@@ -54,6 +54,7 @@ body{
 
 .navLi:hover{
     background-color: #456f93;
+    cursor: pointer;
 }
 
 
@@ -91,6 +92,7 @@ body{
 
 .sideLi:hover{
     background-color: #9bb7d0;
+    cursor: pointer;
 }
 
 /* .verticalContent{
