@@ -1,6 +1,6 @@
 const body = document.getElementById("body")
-const USERID = ""
-const USERNAME = ""
+const USERID = 1
+const USERNAME = "Tom"
 
 let baseUrl = "http://localhost:3000"
 
@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         sampleWords("easy")
         populateWordList()
     }, 3000)
+    renderHome()
 })
 
 document.addEventListener("click", function(e){
@@ -52,6 +53,13 @@ document.addEventListener("click", function(e){
             break;
         case "new-game-hard":
             transitionToGrid("hard")
+            break;
+        case "submit-new-game":
+            console.log(e.target)
+            break;
+        case "submit-username":
+            e.preventDefault()
+            console.log(e.target)
             break;
         default:
             break;
@@ -76,7 +84,7 @@ const renderHome = () => {
 
             <h1 class="menuItem">Would you like to play a new game?</h1>
             
-            <button class="menuItem"> New Game </button>
+            <button class="menuItem" data-id="submit-new-game"> New Game </button>
         </div>
         `
     } else {
@@ -87,7 +95,7 @@ const renderHome = () => {
             <form class="menuItem">
                 <label for="username">Username:</label><br>
                 <input type="text" id="username" name="username">
-                <input type="submit" value="Submit">
+                <input type="submit" value="Submit" data-id="submit-username">
             </form>
         </div>
         `
