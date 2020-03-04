@@ -1,6 +1,6 @@
 const body = document.getElementById("body")
-let USERID = 1
-let USERNAME = "Tom"
+let USERID = ''
+let USERNAME = ""
 
 let baseUrl = "http://localhost:3000"
 
@@ -62,7 +62,7 @@ document.addEventListener("click", function(e){
             break;
         case "submit-username":
             e.preventDefault()
-            console.log(e.target)
+            usernameFetch(e.target.parentNode.children[2].value)
             break;
         default:
             break;
@@ -107,9 +107,13 @@ const renderHome = () => {
         `
     }
 }
+const login = document.getElementById("login-status")
 const renderLogout = () => {
     USERNAME = ""
     USERID = ''
+    login.innerText = "Login"
+
+    login.dataset.id = "login"
     renderHome()
 }
 const renderWordData = () => {
@@ -117,12 +121,31 @@ const renderWordData = () => {
     // going to give a user links to open another window showing word selection data
 }
 const renderLogin = () => {
-    console.log("login")
     
 }
 const renderRules = () => {
     console.log("rules")
     // renders the rules page
+}
+const usernameFetch = (username) => {
+    let user = {username: username}
+    
+    fetch(`${baseUrl}/users`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        body: JSON.stringify(user)
+    })
+    .then(resp => resp.json())
+    .then(user => {
+        USERNAME = user.username
+        USERID = user.id
+        login.innerText = "Logout"
+        login.dataset.id = "logout"
+        renderHome()
+    })
 }
 
 // MENU FUNCTIONS END HERE
@@ -143,16 +166,12 @@ function populateWords(){
     .then(res => res.json())
     .then(data => {
         data.forEach(i => {
-            switch(i.puzzle_setting_id){
-                case 1:
-                    easyWords.push(i.word)
-                break;
-                case 2:
-                    mediumWords.push(i.word)
-                break;
-                case 3:
-                    hardWords.push(i.word)
-                break
+            if(i.puzzle_setting_id % 3 == 1){
+                easyWords.push(i.word)
+            }else if(i.puzzle_setting_id % 3 == 2){ 
+                mediumWords.push(i.word)
+            }else if(i.puzzle_setting_id % 3 == 0){
+                hardWords.push(i.word)
             }
         })
     })
