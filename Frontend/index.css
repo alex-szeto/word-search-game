@@ -235,6 +235,12 @@ background-color: lightgreen;
     display: flex;
     justify-content: center;
     align-content: center;
+    background-color: lightsteelblue;
+    border-color: grey;
+    border-width: 5px;
+    border-style: solid;
+    margin: 50px;
+    font-size: 150%;
 }
 
 .contentRight{

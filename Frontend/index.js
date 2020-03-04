@@ -8,6 +8,11 @@ let baseUrl = "http://localhost:3000"
 let words = [] // List of words
 let grid = []
 
+let easyID = ''
+let mediumID = ''
+let hardID = ''
+
+
 let difficulty = "easy"
 let selected = []
 let validMoves = [] 
@@ -119,7 +124,10 @@ const renderRules = () => {
 
 
 //SETTING SELECTION FUNCTIONS END HERE
+// GET PUZZLE SETTINGS ID
+    
 
+// END GET PUZZLE SETTINGS ID
 
 // POPULATES WORDS
 function populateWords(){
