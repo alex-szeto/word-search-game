@@ -11,13 +11,15 @@ let grid = []
 let easyID = ''
 let mediumID = ''
 let hardID = ''
-
+let timer = 1800
+let pause = true
 
 let difficulty = "easy"
 let selected = []
 let validMoves = [] 
 let renderDisplay = document.querySelector("#renderDisplay")
 
+setInterval(updateTimer, 1000); //Updates timer every 1 second, if pause is false
 
 //GRID VARIABLES END HERE
 
@@ -124,10 +126,6 @@ const renderRules = () => {
 
 
 //SETTING SELECTION FUNCTIONS END HERE
-// GET PUZZLE SETTINGS ID
-    
-
-// END GET PUZZLE SETTINGS ID
 
 // POPULATES WORDS
 function populateWords(){
@@ -190,14 +188,15 @@ function transitionToGrid(gridType){ //Call this method, with it's arguement, a 
     gridMainContent.innerHTML = `
     <div class="timerBar">
         <div id="timer"> <h3>Timer:</h3>
-            <div class="timer">
+            <div class="timer"> &nbsp; <strong id="minSec">${Math.floor(timer/60)}:${("0" + (timer%60).toString()).slice(-2)}</strong>
             </div>
         </div>
         <div id="word">
             <h3>Word:</h3>
             <div id="display_word"class="wordBox">
-            </div>
-            <button> Check Word </button>
+            </div>&nbsp
+            <button> Check Word </button>&nbsp
+            <button id="resetWord">Reset Word </button>
         </div>
     </div>
     <div id="${gridType}-grid" class="contentWindow"></div>
@@ -365,7 +364,23 @@ function loadContentWindowFunctions(){
         }
     })
 
+    document.querySelector("#resetWord").addEventListener("click", function(e) {
+        clear()
+        updateGrid()
+        document.querySelector("#display_word").innerText = ""
+    })
+
+    pause = false
 }
+
+function updateTimer(val = 1){
+    if(!pause){
+        timer -= val
+        document.querySelector("#minSec").innerText = `${Math.floor(timer/60)}:${("0" + (timer%60).toString()).slice(-2)}`
+    }
+}
+
+
 // GRID FUNCTIONS END HERE
 
 
@@ -419,7 +434,7 @@ function renderSettingsWindow() {
 
 function loadSettingsWindowFunctions() {
     document.querySelector("#timer").addEventListener("change", function(e){
-        updateTimer(e.target.value)
+        initializeTimer(e.target.value)
     })
 
     document.querySelector("#difficultySetting").addEventListener("change", function(e){
@@ -433,8 +448,10 @@ function loadSettingsWindowFunctions() {
     })
 }
 
-function updateTimer(newTimer){
-    console.log(newTimer)
+function initializeTimer(newTimer){
+    if(newTimer.match(/^\d+m$/)){
+        timer = parseInt(newTimer.match(/\d+/)*60)
+    }
     document.querySelector("#displayTimer").innerHTML = `<strong>Timer:</strong> ${newTimer.match(/\d+/)} Minutes`
 }
 
