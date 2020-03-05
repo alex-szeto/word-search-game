@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 })
 
 document.addEventListener("click", function(e){
-    //console.log(e.target)
+    // console.log(e.target)
     switch (e.target.dataset.id) {
         case "home":
             renderHome()
@@ -61,8 +61,14 @@ document.addEventListener("click", function(e){
         case "rules":
             renderRules()
             break;
+        case "edit-username":
+            renderEditUsername()
+            break;
         case "rulesExit":
             renderHome()
+            break;
+        case "delete-username":
+            deleteUsername(USERID)
             break;
         // case "new-game-hard":
         //     transitionToGrid("hard")
@@ -70,15 +76,19 @@ document.addEventListener("click", function(e){
         case "submit-new-game":
             renderSettingsWindow()
             break;
-        case "login-username":
-            e.preventDefault()
-            getUsername(document.querySelector("#login-username").value)
-            //usernameFetch(e.target.parentNode.children[2].value)
-            break;
+            case "login-username":
+                e.preventDefault()
+                getUsername(document.querySelector("#login-username").value)
+                //usernameFetch(e.target.parentNode.children[2].value)
+                break;
         case "signup-username":
             e.preventDefault()
             postSignUp(document.querySelector("#signup-username").value)
             //usernameFetch(e.target.parentNode.children[2].value)
+            break;
+        case "edit-username-submit":
+            e.preventDefault()
+            editUsername(document.querySelector("#edit-username").value, USERID);
             break;
         default:
             break;
@@ -103,10 +113,10 @@ const renderHome = () => {
 
             <h1 class="menuItem">Would you like to play a new game?</h1>
             
-            <button class="submitButton" data-id="submit-new-game"> New Game </button>
+            <button class="submitButton" data-id="submit-new-game"> New Game </button><br>
+            <button class="submitButton" data-id="edit-username"> Edit Username </button><br>
+            <button class="submitButton" data-id="delete-username"> Delete Username </button>
         `
-        // <button class="submitButton" data-id="edit-username"> Edit Username </button>
-        //     <button class="submitButton" data-id="delete-username"> Delete Username </button>
     } else {
         renderDisplay.innerHTML = `
         <div class="menu">
@@ -175,21 +185,44 @@ const renderRules = () => {
 
         `
 }
+
+const renderEditUsername = () => {
+    renderDisplay.innerHTML = `
+        <div class="menu">
+            <h1 class="menuItem">Edit Username:</h1>
+            <h1 class="menuItem">Please enter changes and click submit to save changes.</h1>
+            <form class="menuItem">
+                <label for="username">Username:</label><br>
+                <input type="text" id="edit-username" name="username" value="${USERNAME}">
+                <input type="submit" value="Submit" data-id="edit-username-submit">
+            </form>
+        </div>
+    `
+}
+
 const getUsername = (username) => {
     
     fetch(`${baseUrl}/users/${username}`)
     .then(resp => resp.json())
     .then(user => {
-        USERNAME = user.username
-        USERID = user.id
-        login.innerText = "Logout"
-        login.dataset.id = "logout"
-        renderHome()
+        if (user){
+            USERNAME = user.username
+            USERID = user.id
+            login.innerText = "Logout"
+            login.dataset.id = "logout"
+            renderHome()
+        } else {
+            alert("Invalid Username")
+        }
+    })
+    .catch(error => {
+        console.log(error)
     })
 }
+
 const postSignUp = (username) => {
     let user = {username: username}
-    console.log(user)
+    // console.log(user)
     fetch(`${baseUrl}/users`, {
         method: "POST",
         headers: {
@@ -206,6 +239,36 @@ const postSignUp = (username) => {
         renderHome()
     })
     
+}
+
+const editUsername = (username, id) => {
+    let user = {id: id, username: username}
+    // console.log(user)
+    fetch(`${baseUrl}/users/${id}`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json'
+          },
+        body: JSON.stringify(user)
+    })
+    .then(resp => resp.json())
+    .then(user => {
+        console.log(user)
+        USERNAME = user.username
+        USERID = user.id
+        login.innerText = "Logout"
+        login.dataset.id = "logout"
+        renderHome()
+    })
+}
+
+const deleteUsername = (id) => {
+    fetch(`${baseUrl}/users/${id}`, { method: "DELETE" })
+    .then(user => {
+        USERNAME = ""
+        USERID = ""
+        renderHome()
+    })
 }
 
 // MENU FUNCTIONS END HERE
@@ -672,6 +735,7 @@ function loadContentWindowFunctions(){
                     clear()
                     updateGrid()
                 })
+                // check if all are completed and if so then win screen
             }
         }
     })
@@ -699,6 +763,7 @@ function updateTimer(val = 1){
         timer -= val
         document.querySelector("#minSec").innerText = `${Math.floor(timer/60)}:${("0" + (timer%60).toString()).slice(-2)}`
     }
+    // move to loss screen
 }
 
 

@@ -6,6 +6,6 @@ class PuzzleSettingsController < ApplicationController
     
     def index
         puzzleSettings = PuzzleSetting.all
-        render json: puzzleSettings
+        render json: puzzleSettings, include: [:words]
     end
 end
