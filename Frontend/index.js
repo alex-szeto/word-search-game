@@ -198,6 +198,9 @@ const renderEditUsername = () => {
         </div>
     `
 }
+// MENU FUNCTIONS END HERE
+
+// FETCH FUNCTIONS
 
 const getUsername = (username) => {
     
@@ -270,8 +273,7 @@ const deleteUsername = (id) => {
     })
 }
 
-// MENU FUNCTIONS END HERE
-
+// FETCH FUNCTIONS END HERE
 
 //SETTING SELECTION FUNCTIONS
 
