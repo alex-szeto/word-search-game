@@ -66,9 +66,9 @@ document.addEventListener("click", function(e){
         case "edit-username":
             renderEditUsername()
             break;
-        case "rulesExit":
-            renderHome()
-            break;
+        // case "rulesExit":
+        //     renderHome()
+        //     break;
         case "delete-username":
             deleteUsername(USERID)
             break;
@@ -139,7 +139,6 @@ const logout = () => {
     USERNAME = ""
     USERID = ''
     login.innerText = "Login"
-
     login.dataset.id = "login"
     renderHome()
 }
@@ -161,20 +160,22 @@ const renderSignUp = () => {
         </div>
         `
 }
-const renderRules = () => {
-    renderDisplay.innerHTML = `
-        <div class="menu">
 
-            <button id="rulesButton" data-id="rulesExit">x</button>
+let overlay = document.getElementById("overlay")
+
+const renderRules = () => {
+    overlay.innerHTML = `
+        <div id="rulesMenu">
+            <br>
             <h1 class="menuItem">Rules!</h1>
-            <div class="rulesElements">
+            <div id="rulesMenuElements">
                 <h3 class="rulesH3"> Settings: </h3>
                 <ul>
                     <li class="rulesLi">Choose your difficulty! But beware - the harder your choice the larger the grid!</li>
                     <li class="rulesLi">Set your time! But beware - the lower the harder the game!</li>
                 </ul>
             </div>
-            <div class="rulesElements">
+            <div id="rulesMenuElements">
                 <h3 class="rulesH3"> Gameplay: </h3>
                 <ol>
                     <li class="rulesLi">The game has begun! Review the game layout. At the top left you will notice a timer counting down! The game is on! Once the time runs out the game is over.</li>
@@ -201,6 +202,9 @@ const renderEditUsername = () => {
         </div>
     `
 }
+// MENU FUNCTIONS END HERE
+
+// FETCH FUNCTIONS
 
 const getUsername = (username) => {
     
@@ -273,8 +277,7 @@ const deleteUsername = (id) => {
     })
 }
 
-// MENU FUNCTIONS END HERE
-
+// FETCH FUNCTIONS END HERE
 
 //SETTING SELECTION FUNCTIONS
 
