@@ -361,7 +361,7 @@ function transitionToGrid(gridType){ //Call this method, with it's arguement, a 
             <button id="resetWord">Reset Word </button>
         </div>
     </div>
-    &nbsp;&nbsp;<h2><div>Score: <strong id="score">${score}</strong></div></h2>
+    &nbsp;&nbsp;<h3><div>Score: <strong id="score">${score}</strong></div></h3>
     <div id="${gridType}-grid" class="contentWindow"></div>
     
     </div>
