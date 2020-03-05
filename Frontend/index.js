@@ -11,8 +11,9 @@ let grid = []
 let easyID = ''
 let mediumID = ''
 let hardID = ''
-let timer = 1800
+let timer = 300
 let pause = true
+let patternType = "linearWords"
 
 let difficulty = "easy"
 let selected = []
@@ -229,6 +230,7 @@ function populateWords(){
                 hardWords.push(i.word)
             }
         })
+        sampleWords("easy")
     })
 }
 
@@ -315,19 +317,23 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
     let analysis = undefined
     let letterSum = 0
     let wordListCharLength = 0
+    let rng = undefined
 
     switch(gridType){
         case "easy":
             n = 13
             analysis = easyWords
+            rng = 0.35
         break;
         case "medium":
             n = 16
             analysis = mediumWords
+            rng = 0.5
         break;
         case "hard":
             n = 20
             analysis = hardWords
+            rng = 0.65
         break;
     }
 
@@ -396,23 +402,22 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
     let verticalObstacles = {}
     let alreadyPlaced = []
 
-    switch(gridType){
-        case "easy":
-        for(let i = 0; 13 > i; i++){
+    if(patternType == "linearWords"){
+        for(let i = 0; n > i; i++){
             verticalObstacles[i] = []
         }
 
             words.forEach((val)=> {
                 if(Math.random() > 0.5){
-                let rand = Math.floor(Math.random() * 13)
+                let rand = Math.floor(Math.random() * n)
                 while(placed.includes(rand)){
-                    rand = Math.floor(Math.random() * 13)
+                    rand = Math.floor(Math.random() * n)
                 }
                 placed.push(rand)
 
-                let startingPos = Math.floor(Math.random() * (13-val.length))
+                let startingPos = Math.floor(Math.random() * (n-val.length))
 
-                if(Math.random() > 0.3){
+                if(Math.random() > rng){
                     for(let i = 0; val.length > i; i++){
                     document.getElementById(`${rand}_${startingPos + i}`).innerText = val[i].toString().toUpperCase()
                     verticalObstacles[rand].push(startingPos + i)//rand
@@ -427,10 +432,9 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
                     vertical.push(val)
                 }
             })
-            //console.log(verticalObstacles)
             for(let i = 0; vertical.length > i; i++){
-                let rand = Math.floor(Math.random() * (13 -vertical[i].length))
-                let column = Math.floor(Math.random() * (13 -vertical[i].length))
+                let rand = Math.floor(Math.random() * (n -vertical[i].length))
+                let column = Math.floor(Math.random() * (n -vertical[i].length))
                 let valid = false
             
                 while(valid == false){
@@ -441,15 +445,15 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
                         }
                     }
                     if(sequence == false){
-                        column = Math.floor(Math.random() * (13 -vertical[i].length))
-                        rand = Math.floor(Math.random() * (13 -vertical[i].length))
+                        column = Math.floor(Math.random() * (n -vertical[i].length))
+                        rand = Math.floor(Math.random() * (n -vertical[i].length))
                     }else if(sequence == true){
                         alreadyPlaced.push(rand)
                         valid = true
                     }
                 }
 
-                if(Math.random() > 0.3){
+                if(Math.random() > rng){
                     for(let j = 0; vertical[i].length > j; j++){
                         document.getElementById(`${column + j}_${rand}`).innerText = vertical[i][j].toString().toUpperCase()
                     }
@@ -459,135 +463,103 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
                     }
                 }
             }
+    } else if(patternType == "curvedWords"){
+        let cache = []
+        words.forEach(curvedWord => {
+            let curr = [...Array(curvedWord.length)].map(e => Array(2).fill(0))
+            let index = ["0_0"]
 
-        break;
-        case "medium":
-        for(let i = 0; 16 > i; i++){
-            verticalObstacles[i] = []
+
+            curr[0] = [0,0]
+            let rand = Math.random()
+            if(0.25 > rand){
+                curr[1] = [0,1]
+                index.push("0_1")
+            } else if(0.5 > rand){
+                curr[1] = [1,0]
+                index.push("1_0")
+            } else if ( 0.75 > rand){
+                curr[1] = [-1, 0]
+                index.push("-1_0")
+            } else if ( 1 > rand){
+                curr[1] = [0,-1]
+                index.push("0_-1")
+            }
+
+            
+            for(let i = 2; curvedWord.length > i ; i++){
+                if(Math.random() > 0.7){
+                    let prep = true
+                    let curve = Math.random()
+                    while(prep){
+                        curve = Math.random()
+                            if(0.25 > curve && !(index.includes(`${curr[i-1][0] + 1}_${curr[i-1][1]}`))){
+                                index.push(`${curr[i-1][0] + 1}_${curr[i-1][1]}`)
+                                curr[i] = [curr[i-1][0] + 1, curr[i-1][1]]
+                                prep = false
+                            } else if( 0.5 > curve && !(index.includes(`${curr[i-1][0] - 1}_${curr[i-1][1]}`))){
+                                index.push(`${curr[i-1][0] - 1}_${curr[i-1][1]}`)
+                                curr[i] = [curr[i-1][0] - 1, curr[i-1][1]]
+                                prep = false
+                            } else if ( 0.75 > curve && !(index.includes(`${curr[i-1][0]}_${curr[i-1][1] + 1}`))){
+                                index.push(`${curr[i-1][0]}_${curr[i-1][1] + 1}`)
+                                curr[i] = [curr[i-1][0], curr[i-1][1] + 1]
+                                prep = false
+                            } else if (1 > curve && !(index.includes(`${curr[i-1][0]}_${curr[i-1][1] - 1}`))){
+                                index.push(`${curr[i-1][0]}_${curr[i-1][1] - 1}`)
+                                curr[i] = [curr[i-1][0], curr[i-1][1] - 1]
+                                prep = false
+                            }
+                        }
+                    } 
+                else{
+                if(curr[i-1][0] - curr[i-2][0] != 0){
+                    if(curr[i-1][0] > curr[i-2][0]){
+                        index.push(`${curr[i-1][0] + 1}_${curr[i-1][1]}`)
+                        curr[i] = [curr[i-1][0] + 1, curr[i-1][1]]
+                    }
+                    else{
+                        index.push(`${curr[i-1][0] - 1}_${curr[i-1][1]}`)
+                        curr[i] = [curr[i-1][0] - 1, curr[i-1][1]]
+                    }
+                } else if (curr[i-1][1] - curr[i-2][1] != 0) {
+                    if(curr[i-1][1] > curr[i-2][1]){
+                        index.push(`${curr[i-1][0]}_${curr[i-1][1] + 1}`)
+                        curr[i] = [curr[i-1][0], curr[i-1][1] + 1]
+                    }
+                    else{
+                        index.push(`${curr[i-1][0]}_${curr[i-1][1] - 1}`)
+                        curr[i] = [curr[i-1][0], curr[i-1][1] - 1]
+                    }
+                }
+            }
+            }
+            cache.push(curr)
+        })
+
+        let collisions = []
+        for(let i = 0 ; words.length > i; i++){
+            let randCol = Math.floor(Math.random() * n)
+            let randRow = Math.floor(Math.random() * n)
+            let canFit = false
+
+            while(canFit == false){
+                canFit = true
+                randCol = Math.floor(Math.random() * n)
+                randRow = Math.floor(Math.random() * n)
+                for(let char = 0; words[i].length > char; char++){
+                    if(collisions.includes(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`) || document.getElementById(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`) == undefined){
+                        canFit = false
+                    }
+                }
+            }
+
+            for(let char = 0; words[i].length > char; char++){
+                collisions.push(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`)
+                document.getElementById(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`).innerText = words[i][char].toString().toUpperCase()
+            }
+
         }
-            words.forEach((val)=> {
-                if(Math.random() > 0.5){
-                let rand = Math.floor(Math.random() * 16)
-                while(placed.includes(rand)){
-                    rand = Math.floor(Math.random() * 16)
-                }
-                placed.push(rand)
-
-                let startingPos = Math.floor(Math.random() * (16-val.length))
-
-                if(Math.random() > 0.5){
-                    for(let i = 0; val.length > i; i++){
-                    document.getElementById(`${rand}_${startingPos + i}`).innerText = val[i].toString().toUpperCase()
-                    verticalObstacles[rand].push(startingPos + i)//rand
-                }
-                } else{
-                    for(let i = 0; val.length > i; i++){
-                        document.getElementById(`${rand}_${startingPos + i}`).innerText = val[val.length - i - 1].toString().toUpperCase()
-                        verticalObstacles[rand].push(startingPos + i)//rand
-                    }
-                }
-                } else{
-                    vertical.push(val)
-                }
-            })
-            
-            for(let i = 0; vertical.length > i; i++){
-                let rand = Math.floor(Math.random() * (16 -vertical[i].length))
-                let column = Math.floor(Math.random() * (16 -vertical[i].length))
-                let valid = false
-            
-                while(valid == false){
-                    let sequence = true
-                    for(let j = 0; vertical[i].length > j; j++){
-                        if(verticalObstacles[column + j].includes(rand) || alreadyPlaced.includes(rand)){
-                            sequence = false
-                        }
-                    }
-                    if(sequence == false){
-                        column = Math.floor(Math.random() * (16 -vertical[i].length))
-                        rand = Math.floor(Math.random() * (16 -vertical[i].length))
-                    }else if(sequence == true){
-                        alreadyPlaced.push(rand)
-                        valid = true
-                    }
-                }
-
-                if(Math.random() > 0.5){
-                    for(let j = 0; vertical[i].length > j; j++){
-                        document.getElementById(`${column + j}_${rand}`).innerText = vertical[i][j].toString().toUpperCase()
-                    }
-                } else{
-                    for(let j = 0; vertical[i].length > j; j++){
-                        document.getElementById(`${column + j}_${rand}`).innerText = vertical[i][vertical[i].length -j -1].toString().toUpperCase()
-                    }
-                }
-            }
-        break;
-        case "hard":
-
-        for(let i = 0; 20 > i; i++){
-            verticalObstacles[i] = []
-        }
-            words.forEach((val)=> {
-                if(Math.random() > 0.5){
-                let rand = Math.floor(Math.random() * 20)
-                while(placed.includes(rand)){
-                    rand = Math.floor(Math.random() * 20)
-                }
-                placed.push(rand)
-
-                let startingPos = Math.floor(Math.random() * (20-val.length))
-
-                if(Math.random() > 0.65){
-                    for(let i = 0; val.length > i; i++){
-                    document.getElementById(`${rand}_${startingPos + i}`).innerText = val[i].toString().toUpperCase()
-                    verticalObstacles[rand].push(startingPos + i)//rand
-                }
-                } else{
-                    for(let i = 0; val.length > i; i++){
-                        document.getElementById(`${rand}_${startingPos + i}`).innerText = val[val.length - i - 1].toString().toUpperCase()
-                        verticalObstacles[rand].push(startingPos + i)//rand
-                    }
-                }
-                } else{
-                    vertical.push(val)
-                }
-            })
-            
-            for(let i = 0; vertical.length > i; i++){
-                let rand = Math.floor(Math.random() * (20 -vertical[i].length))
-                let column = Math.floor(Math.random() * (20 -vertical[i].length))//-vertical[i].length))
-                let valid = false
-            
-                while(valid == false){
-                    console.log("hi")
-                    let sequence = true
-                    for(let j = 0; vertical[i].length > j; j++){
-                        if(verticalObstacles[column + j].includes(rand) || alreadyPlaced.includes(rand)){
-                            sequence = false
-                        }
-                    }
-                    if(sequence == false){
-                        column = Math.floor(Math.random() * (20 -vertical[i].length))
-                        rand = Math.floor(Math.random() * 20)//-vertical[i].length))
-                    }else if(sequence == true){
-                        alreadyPlaced.push(rand)
-                        valid = true
-                    }
-                }
-
-                if(Math.random() > 0.65){
-                    for(let j = 0; vertical[i].length > j; j++){
-                        document.getElementById(`${column + j}_${rand}`).innerText = vertical[i][j].toString().toUpperCase()
-                    }
-                } else{
-                    for(let j = 0; vertical[i].length > j; j++){
-                        document.getElementById(`${column + j}_${rand}`).innerText = vertical[i][vertical[i].length -j -1].toString().toUpperCase()
-                    }
-                }
-            }
-
-        break;
     }
 
     difficulty = `${gridType}-grid`
@@ -672,7 +644,7 @@ function loadContentWindowFunctions(){
             }else if(selected.length > 0 && e.target.id == selected[selected.length -1][0]){ //Unselects from first element
                   delMostRecent()
                   updateGrid()
-            } else if (selected.length > 19){ // Clears if selected length is greater than 19
+            } else if (selected.length > 75){ // Clears if selected length is greater than 75
                 clear()
                 updateGrid()
             }else if(validMoves.includes(e.target.id)){ //
@@ -753,20 +725,32 @@ function renderSettingsWindow() {
         <h2>&nbsp;Set Timer</h2>
         <div style="display: flex;">
         <form id="timer">
+            <input type="radio" name="timer" value="5m" checked>
+            <label for="5m">5 Min</label>
             <input type="radio" name="timer" value="10m">
             <label for="10m">10 Min</label>
+            <input type="radio" name="timer" value="15m">
+            <label for="15m">15 Min</label>
             <input type="radio" name="timer" value="20m">
             <label for="20m">20 Min</label>
-            <input type="radio" name="timer" value="30m" checked>
+            <input type="radio" name="timer" value="30m">
             <label for="30m">30 Min</label>
         </form>
         </div>
+        <h2>&nbsp;Word Pattern</h2>
+        <form id="matchType">
+            <input type="radio" name="timer" value="linearWords" checked>
+            <label for="5m">Horizontal And Vertical Words</label><br>
+            <input type="radio" name="timer" value="curvedWords">
+            <label for="10m">Curved Words</label>
+        </form>
         <br>
         
         <p id="configDesc"><h3>Configuration Description:</h3> <br>
         <li id="displaySize"><strong>Grid Size:</strong> 13x13 (169 Elements)</li>
         <li id="displayTimer"> <strong>Timer:</strong> 30 Minutes</li>
         <li id="displayWords"><strong>Word List Length:</strong> 6 Words</li>
+        <li id="genPattern"><strong>Generate Pattern:</strong> Horizontal and Vertical Words</li>
             <br>
             <li id="editDistanceCheck">Words Will Be <strong>Especially Distinct</strong> From Each Other</li>
             <li id="minLengthDisplay">Each Word Will Be <strong>3-6 Characters</strong> Long</li>
@@ -777,6 +761,7 @@ function renderSettingsWindow() {
         </div>
         
         `
+    //sampleWords("easy")
     loadSettingsWindowFunctions()
 }
 
@@ -795,6 +780,21 @@ function loadSettingsWindowFunctions() {
         transitionToGrid(`${difficulty}`)
         populateWordList()
     })
+
+    document.querySelector("#matchType").addEventListener("click", function(e){
+        updatePattern(e.target.value)
+    })
+}
+
+
+function updatePattern(newType) {
+    if(newType == "curvedWords"){
+        patternType = "curvedWords"
+        document.querySelector("#genPattern").innerHTML = "<strong>Generate Pattern:</strong> Curved Lines Included <strong>(Hard)</strong>"
+    } else if (newType == "linearWords" ){
+        patternType = "linearWords"
+        document.querySelector("#genPattern").innerHTML = "<strong>Generate Pattern:</strong> Horizontal and Vertical Words"
+    }
 }
 
 function initializeTimer(newTimer){
@@ -812,7 +812,7 @@ function updateDifficulty(newDifficulty){
             sampleWords("easy")
             document.querySelector("#displaySize").innerHTML = `<strong>Grid Size:</strong> 13x13 (169 Elements)`
             document.querySelector("#displayWords").innerHTML = `<strong>Word List Length:</strong> 6 Words`
-
+            
             document.querySelector("#editDistanceCheck").innerHTML = `Words Will Be <strong>Especially Distinct</strong> From Each Other`
             document.querySelector("#minLengthDisplay").innerHTML = `Each Word Will Be <strong>3-6 Characters</strong> Long`
             document.querySelector("#dataSetLength").innerHTML = `Words Pulled From: <strong>Easy</strong> Dataset of <strong>${easyWords.length}</strong> words`
