@@ -15,7 +15,11 @@ let timer = 300
 let originTimer = 300
 let pause = true
 let patternType = "linearWords"
+
 let score = 0
+let matchByMultipler = 0
+let difficultyMultipler = 0 
+let timerMultipler = 0
 
 let difficulty = "easy"
 let selected = []
@@ -728,7 +732,7 @@ function loadContentWindowFunctions(){
             if(words.includes(result.toLowerCase())){
                 document.querySelector("#displayWords").childNodes.forEach(i =>{
                     if(i.innerText == result.toLowerCase()){
-                        score += (result.length * (1 + ))
+                        score += (result.length * (1 + 0))
                         i.setAttribute("class", "completedWord")
                         i.innerHTML = `<strike>${i.innerText}</strike>`
                     }    
@@ -781,9 +785,9 @@ function updateTimer(val = 1){
 
 // SETTINGS WINDOW FUNCTIONS 
 function renderSettingsWindow() {
-    updateDifficulty("easy")
+    difficulty = "easy"
     updateTimer(5)
-    patternType = "linearWords"
+    updatePattern("linearWords")
 
     document.querySelector("#renderDisplay").innerHTML = `
     <div id="difficulty">
@@ -868,9 +872,13 @@ function loadSettingsWindowFunctions() {
 function updatePattern(newType) {
     if(newType == "curvedWords"){
         patternType = "curvedWords"
+        matchByMultipler = 0.5
+        if(document.querySelector("#genPattern") == null) return
         document.querySelector("#genPattern").innerHTML = "<strong>Generate Pattern:</strong> Curved Lines Included <strong>(Hard)</strong>"
     } else if (newType == "linearWords" ){
         patternType = "linearWords"
+        matchByMultipler = 0
+        if(document.querySelector("#genPattern") == null) return
         document.querySelector("#genPattern").innerHTML = "<strong>Generate Pattern:</strong> Horizontal and Vertical Words"
     }
 }
@@ -879,6 +887,11 @@ function initializeTimer(newTimer){
     if(newTimer.match(/^\d+m$/)){
         timer = parseInt(newTimer.match(/\d+/)*60)
         originTimer = parseInt(newTimer.match(/\d+/)*60)
+        if(originTimer == 300){
+            timerMultipler = 0.25
+        } else{
+            timerMultipler = 0
+        }
     }
     document.querySelector("#displayTimer").innerHTML = `<strong>Timer:</strong> ${newTimer.match(/\d+/)} Minutes`
 }
@@ -888,6 +901,7 @@ function updateDifficulty(newDifficulty){
     switch(newDifficulty){
         case 'easy':
             difficulty = "easy"
+            difficultyMultipler = 0
             sampleWords("easy")
             document.querySelector("#displaySize").innerHTML = `<strong>Grid Size:</strong> 13x13 (169 Elements)`
             document.querySelector("#displayWords").innerHTML = `<strong>Word List Length:</strong> 6 Words`
@@ -899,6 +913,7 @@ function updateDifficulty(newDifficulty){
 
         case 'medium':
             difficulty = "medium"
+            difficultyMultipler = 0.25
             sampleWords("medium")
             document.querySelector("#displaySize").innerHTML = `<strong>Grid Size:</strong> 16x16 (256 Elements)`
             document.querySelector("#displayWords").innerHTML = `<strong>Word List Length:</strong> 8 Words`
@@ -910,6 +925,7 @@ function updateDifficulty(newDifficulty){
 
         case 'hard':
             difficulty = "hard"
+            difficultyMultipler = 0.5
             sampleWords("hard")
             document.querySelector("#displaySize").innerHTML = `<strong>Grid Size:</strong> 20x20 (400 Elements)`
             document.querySelector("#displayWords").innerHTML = `<strong>Word List Length:</strong> 10 Words`
