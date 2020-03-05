@@ -345,6 +345,7 @@ function populateWordList(){ //Words must not be empty, invoke sampleWords prior
 //* GRID FUNCTIONS
 function transitionToGrid(gridType){ //Call this method, with it's arguement, a difficulty to transition to grid.
     if(gridType !== "easy" && gridType !== "medium" && gridType !== "hard") return //Early exit if difficulty not valid
+    score = 0
 
     let gridMainContent = document.createElement("div") //Creates grid
     gridMainContent.innerHTML = `
@@ -360,6 +361,7 @@ function transitionToGrid(gridType){ //Call this method, with it's arguement, a 
             <button id="resetWord">Reset Word </button>
         </div>
     </div>
+    &nbsp;&nbsp;<h2><div>Score: <strong id="score">${score}</strong></div></h2>
     <div id="${gridType}-grid" class="contentWindow"></div>
     
     </div>
@@ -373,7 +375,7 @@ function transitionToGrid(gridType){ //Call this method, with it's arguement, a 
     highScoresRightDisplay.setAttribute("class", "contentRight")
 
     highScoresRightDisplay.innerHTML = `
-        <h1 id="displayWords"> Word List</h1>
+        <h2 id="displayWords"> Word List</h2>
     `
 
     renderDisplay.parentNode.appendChild(highScoresRightDisplay)
@@ -732,7 +734,8 @@ function loadContentWindowFunctions(){
             if(words.includes(result.toLowerCase())){
                 document.querySelector("#displayWords").childNodes.forEach(i =>{
                     if(i.innerText == result.toLowerCase()){
-                        score += (result.length * (1 + 0))
+                        score += result.length * ((1 + timerMultipler + matchByMultipler + difficultyMultipler) * 100)
+                        updateScore(score)
                         i.setAttribute("class", "completedWord")
                         i.innerHTML = `<strike>${i.innerText}</strike>`
                     }    
@@ -777,6 +780,10 @@ function updateTimer(val = 1){
         document.querySelector("#minSec").innerText = `${Math.floor(timer/60)}:${("0" + (timer%60).toString()).slice(-2)}`
     }
     // move to loss screen
+}
+
+function updateScore(newScore){
+    document.querySelector("#score").innerText = newScore
 }
 
 
