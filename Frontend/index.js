@@ -12,8 +12,10 @@ let easyID = ''
 let mediumID = ''
 let hardID = ''
 let timer = 300
+let originTimer = 300
 let pause = true
 let patternType = "linearWords"
+let score = 0
 
 let difficulty = "easy"
 let selected = []
@@ -348,7 +350,6 @@ function transitionToGrid(gridType){ //Call this method, with it's arguement, a 
             <h3>Word:</h3>
             <div id="display_word"class="wordBox">
             </div>&nbsp
-            <button> Check Word </button>&nbsp
             <button id="resetWord">Reset Word </button>
         </div>
     </div>
@@ -724,6 +725,7 @@ function loadContentWindowFunctions(){
             if(words.includes(result.toLowerCase())){
                 document.querySelector("#displayWords").childNodes.forEach(i =>{
                     if(i.innerText == result.toLowerCase()){
+                        score += (result.length * (1 + ))
                         i.setAttribute("class", "completedWord")
                         i.innerHTML = `<strike>${i.innerText}</strike>`
                     }    
@@ -761,6 +763,10 @@ function loadContentWindowFunctions(){
 function updateTimer(val = 1){
     if(!pause){
         timer -= val
+        if(0 >= timer){ //Code block executes if timer is at 0.
+            pause = true
+            document.querySelector("#minSec").innerText = "Game Over!"
+        }
         document.querySelector("#minSec").innerText = `${Math.floor(timer/60)}:${("0" + (timer%60).toString()).slice(-2)}`
     }
     // move to loss screen
@@ -772,6 +778,10 @@ function updateTimer(val = 1){
 
 // SETTINGS WINDOW FUNCTIONS 
 function renderSettingsWindow() {
+    updateDifficulty("easy")
+    updateTimer(5)
+    patternType = "linearWords"
+
     document.querySelector("#renderDisplay").innerHTML = `
     <div id="difficulty">
         <h2>&nbsp;Choose Difficulty</h2>
@@ -865,6 +875,7 @@ function updatePattern(newType) {
 function initializeTimer(newTimer){
     if(newTimer.match(/^\d+m$/)){
         timer = parseInt(newTimer.match(/\d+/)*60)
+        originTimer = parseInt(newTimer.match(/\d+/)*60)
     }
     document.querySelector("#displayTimer").innerHTML = `<strong>Timer:</strong> ${newTimer.match(/\d+/)} Minutes`
 }
