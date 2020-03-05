@@ -19,6 +19,24 @@ class UsersController < ApplicationController
         user = User.find_by(username: params[:name] )
         render json: user
     end
+
+    def update
+        user = User.find(params[:id])
+        user.update(user_params)
+        render json: user
+    end
+
+    def destroy
+        user = User.find(params[:id])
+        unless user.nil?
+            user.destroy
+            render json: user
+          else
+            render json: { error: "user not Found!" }, status: 404
+          end
+    end
+    
+    
      
     private
     def user_params
