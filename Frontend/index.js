@@ -391,22 +391,26 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
     let letterSum = 0
     let wordListCharLength = 0
     let rng = undefined
+    let curveRating = 0
 
     switch(gridType){
         case "easy":
             n = 13
             analysis = easyWords
             rng = 0.35
+            curveRating = 0.3
         break;
         case "medium":
             n = 16
             analysis = mediumWords
             rng = 0.5
+            curveRating = 0.4
         break;
         case "hard":
             n = 20
             analysis = hardWords
             rng = 0.65
+            curveRating = 0.55
         break;
     }
 
@@ -561,7 +565,7 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
 
             
             for(let i = 2; curvedWord.length > i ; i++){
-                if(Math.random() > 0.7){
+                if(Math.random() > (1 - curveRating)){
                     let prep = true
                     let curve = Math.random()
                     while(prep){
@@ -627,9 +631,16 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
                 }
             }
 
-            for(let char = 0; words[i].length > char; char++){
-                collisions.push(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`)
-                document.getElementById(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`).innerText = words[i][char].toString().toUpperCase()
+            if(Math.random > (rng - 0.15)){
+                for(let char = 0; words[i].length > char; char++){
+                    collisions.push(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`)
+                    document.getElementById(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`).innerText = words[i][char].toString().toUpperCase()
+                }
+            } else {
+                for(let char = 0; words[i].length > char; char++){
+                    collisions.push(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`)
+                    document.getElementById(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`).innerText = words[i][words[i].length - char - 1].toString().toUpperCase()
+                }
             }
 
         }
