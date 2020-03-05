@@ -35,12 +35,14 @@ let hardWords = []
 //*DOM FUNCTIONS
 document.addEventListener("DOMContentLoaded", function (event) {
     populateWords()
-    renderSettingsWindow()
+
+    renderHome()
+    //renderSettingsWindow()
     //renderLogin()
 })
 
 document.addEventListener("click", function(e){
-    console.log(e.target)
+    //console.log(e.target)
     switch (e.target.dataset.id) {
         case "home":
             renderHome()
@@ -390,10 +392,12 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
     }
 
     let placed = []
+    let vertical = []
+    let verticalObstacles = {}
+    let alreadyPlaced = []
+
     switch(gridType){
         case "easy":
-        let vertical = []
-        let verticalObstacles = {}
         for(let i = 0; 13 > i; i++){
             verticalObstacles[i] = []
         }
@@ -423,7 +427,6 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
                     vertical.push(val)
                 }
             })
-            let alreadyPlaced = []
             //console.log(verticalObstacles)
             for(let i = 0; vertical.length > i; i++){
                 let rand = Math.floor(Math.random() * (13 -vertical[i].length))
@@ -459,10 +462,131 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
 
         break;
         case "medium":
-        console.log("medium")
+        for(let i = 0; 16 > i; i++){
+            verticalObstacles[i] = []
+        }
+            words.forEach((val)=> {
+                if(Math.random() > 0.5){
+                let rand = Math.floor(Math.random() * 16)
+                while(placed.includes(rand)){
+                    rand = Math.floor(Math.random() * 16)
+                }
+                placed.push(rand)
+
+                let startingPos = Math.floor(Math.random() * (16-val.length))
+
+                if(Math.random() > 0.5){
+                    for(let i = 0; val.length > i; i++){
+                    document.getElementById(`${rand}_${startingPos + i}`).innerText = val[i].toString().toUpperCase()
+                    verticalObstacles[rand].push(startingPos + i)//rand
+                }
+                } else{
+                    for(let i = 0; val.length > i; i++){
+                        document.getElementById(`${rand}_${startingPos + i}`).innerText = val[val.length - i - 1].toString().toUpperCase()
+                        verticalObstacles[rand].push(startingPos + i)//rand
+                    }
+                }
+                } else{
+                    vertical.push(val)
+                }
+            })
+            
+            for(let i = 0; vertical.length > i; i++){
+                let rand = Math.floor(Math.random() * (16 -vertical[i].length))
+                let column = Math.floor(Math.random() * (16 -vertical[i].length))
+                let valid = false
+            
+                while(valid == false){
+                    let sequence = true
+                    for(let j = 0; vertical[i].length > j; j++){
+                        if(verticalObstacles[column + j].includes(rand) || alreadyPlaced.includes(rand)){
+                            sequence = false
+                        }
+                    }
+                    if(sequence == false){
+                        column = Math.floor(Math.random() * (16 -vertical[i].length))
+                        rand = Math.floor(Math.random() * (16 -vertical[i].length))
+                    }else if(sequence == true){
+                        alreadyPlaced.push(rand)
+                        valid = true
+                    }
+                }
+
+                if(Math.random() > 0.5){
+                    for(let j = 0; vertical[i].length > j; j++){
+                        document.getElementById(`${column + j}_${rand}`).innerText = vertical[i][j].toString().toUpperCase()
+                    }
+                } else{
+                    for(let j = 0; vertical[i].length > j; j++){
+                        document.getElementById(`${column + j}_${rand}`).innerText = vertical[i][vertical[i].length -j -1].toString().toUpperCase()
+                    }
+                }
+            }
         break;
         case "hard":
-        console.log("hard")
+
+        for(let i = 0; 20 > i; i++){
+            verticalObstacles[i] = []
+        }
+            words.forEach((val)=> {
+                if(Math.random() > 0.5){
+                let rand = Math.floor(Math.random() * 20)
+                while(placed.includes(rand)){
+                    rand = Math.floor(Math.random() * 20)
+                }
+                placed.push(rand)
+
+                let startingPos = Math.floor(Math.random() * (20-val.length))
+
+                if(Math.random() > 0.65){
+                    for(let i = 0; val.length > i; i++){
+                    document.getElementById(`${rand}_${startingPos + i}`).innerText = val[i].toString().toUpperCase()
+                    verticalObstacles[rand].push(startingPos + i)//rand
+                }
+                } else{
+                    for(let i = 0; val.length > i; i++){
+                        document.getElementById(`${rand}_${startingPos + i}`).innerText = val[val.length - i - 1].toString().toUpperCase()
+                        verticalObstacles[rand].push(startingPos + i)//rand
+                    }
+                }
+                } else{
+                    vertical.push(val)
+                }
+            })
+            
+            for(let i = 0; vertical.length > i; i++){
+                let rand = Math.floor(Math.random() * (20 -vertical[i].length))
+                let column = Math.floor(Math.random() * (20 -vertical[i].length))//-vertical[i].length))
+                let valid = false
+            
+                while(valid == false){
+                    console.log("hi")
+                    let sequence = true
+                    for(let j = 0; vertical[i].length > j; j++){
+                        if(verticalObstacles[column + j].includes(rand) || alreadyPlaced.includes(rand)){
+                            sequence = false
+                        }
+                    }
+                    if(sequence == false){
+                        column = Math.floor(Math.random() * (20 -vertical[i].length))
+                        rand = Math.floor(Math.random() * 20)//-vertical[i].length))
+                    }else if(sequence == true){
+                        alreadyPlaced.push(rand)
+                        valid = true
+                    }
+                }
+
+                if(Math.random() > 0.65){
+                    for(let j = 0; vertical[i].length > j; j++){
+                        document.getElementById(`${column + j}_${rand}`).innerText = vertical[i][j].toString().toUpperCase()
+                    }
+                } else{
+                    for(let j = 0; vertical[i].length > j; j++){
+                        document.getElementById(`${column + j}_${rand}`).innerText = vertical[i][vertical[i].length -j -1].toString().toUpperCase()
+                    }
+                }
+            }
+
         break;
     }
 
