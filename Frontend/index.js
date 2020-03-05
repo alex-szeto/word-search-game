@@ -728,7 +728,7 @@ function loadContentWindowFunctions(){
             if(words.includes(result.toLowerCase())){
                 document.querySelector("#displayWords").childNodes.forEach(i =>{
                     if(i.innerText == result.toLowerCase()){
-                        score += (result.length * (1 + ))
+                        score += (result.length * (1))
                         i.setAttribute("class", "completedWord")
                         i.innerHTML = `<strike>${i.innerText}</strike>`
                     }    
