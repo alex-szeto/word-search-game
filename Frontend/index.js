@@ -391,22 +391,26 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
     let letterSum = 0
     let wordListCharLength = 0
     let rng = undefined
+    let curveRating = 0
 
     switch(gridType){
         case "easy":
             n = 13
             analysis = easyWords
             rng = 0.35
+            curveRating = 0.3
         break;
         case "medium":
             n = 16
             analysis = mediumWords
             rng = 0.5
+            curveRating = 0.4
         break;
         case "hard":
             n = 20
             analysis = hardWords
             rng = 0.65
+            curveRating = 0.55
         break;
     }
 
@@ -561,7 +565,7 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
 
             
             for(let i = 2; curvedWord.length > i ; i++){
-                if(Math.random() > 0.7){
+                if(Math.random() > (1 - curveRating)){
                     let prep = true
                     let curve = Math.random()
                     while(prep){
@@ -627,9 +631,16 @@ function populate(gridType){ //Populates grid & adds click support. Note: GRID M
                 }
             }
 
-            for(let char = 0; words[i].length > char; char++){
-                collisions.push(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`)
-                document.getElementById(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`).innerText = words[i][char].toString().toUpperCase()
+            if(Math.random > (rng - 0.15)){
+                for(let char = 0; words[i].length > char; char++){
+                    collisions.push(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`)
+                    document.getElementById(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`).innerText = words[i][char].toString().toUpperCase()
+                }
+            } else {
+                for(let char = 0; words[i].length > char; char++){
+                    collisions.push(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`)
+                    document.getElementById(`${randCol + cache[i][char][0]}_${randRow + cache[i][char][1]}`).innerText = words[i][words[i].length - char - 1].toString().toUpperCase()
+                }
             }
 
         }
@@ -738,7 +749,7 @@ function loadContentWindowFunctions(){
                         updateScore(score)
                         i.setAttribute("class", "completedWord")
                         i.innerHTML = `<strike>${i.innerText}</strike>`
-                    }    
+                    }
                 })
 
                 selected.forEach(e => {
@@ -747,7 +758,27 @@ function loadContentWindowFunctions(){
                     clear()
                     updateGrid()
                 })
-                // check if all are completed and if so then win screen
+                let haveWon = []
+                document.querySelector("#displayWords").childNodes.forEach( i=> {
+                    if (i.className == "completedWord"){
+                        haveWon.push(true)
+                    } else {
+                        haveWon.push(false)
+                    }
+                })
+                haveWon.shift()
+                if (!haveWon.includes(false)){
+                    renderHome();
+                    overlay.innerHTML = `
+                    <div id="rulesMenu">
+                        <br>
+                        <h1 class="menuItem">YOU WIN!!!</h1>
+                        <div id="gameOverOverlay">
+                            <button> Play again? </button>
+                        </div>
+                    `
+                    document.getElementById("overlay").style.display = "block";
+                }
             }
         }
     })
@@ -771,7 +802,7 @@ function loadContentWindowFunctions(){
 }
 
 function updateTimer(val = 1){
-    if(!pause){
+    if(!pause && document.querySelector("#minSec") != undefined){
         timer -= val
         if(0 >= timer){ //Code block executes if timer is at 0.
             pause = true
@@ -779,8 +810,19 @@ function updateTimer(val = 1){
         }
         document.querySelector("#minSec").innerText = `${Math.floor(timer/60)}:${("0" + (timer%60).toString()).slice(-2)}`
     }
-    console.log(timer)
-    // move to loss screen
+    if (timer === 0){
+        renderHome();
+        timer = 300
+        overlay.innerHTML = `
+        <div id="rulesMenu">
+            <br>
+            <h1 class="menuItem">Oh no! You failed!....dummy</h1>
+            <div id="gameOverOverlay">
+                <button> Try again? </button>
+            </div>
+        `
+        document.getElementById("overlay").style.display = "block";
+    }
 }
 
 function updateScore(newScore){

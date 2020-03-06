@@ -383,6 +383,17 @@ background-color: lightgreen;
     cursor: pointer;
 }
 
+#gameOverOverlay{
+    justify-self: center;
+    align-self: center;
+    display: flex;
+    flex-basis: 1 1 auto;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
 #overlayText{
     position: absolute;
     top: 50%;
